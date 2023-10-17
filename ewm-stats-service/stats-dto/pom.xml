@@ -9,15 +9,16 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>dto-stats</artifactId>
+    <artifactId>stats-dto</artifactId>
 
-    <name>dto-stats</name>
+    <name>stats-dto</name>
 
     <dependencies>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+            <version>3.0.4</version>
         </dependency>
 
     </dependencies>
