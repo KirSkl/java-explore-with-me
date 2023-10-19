@@ -1,11 +1,11 @@
-package ru.prakticum.ewm.controller;
+package ru.practicum.controller;
 
 import dto.EndpointHitDto;
 import dto.ViewStatsDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.prakticum.ewm.service.StatsService;
+import ru.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
