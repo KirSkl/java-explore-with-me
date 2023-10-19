@@ -2,6 +2,7 @@ package ru.practicum.controller;
 
 import dto.EndpointHitDto;
 import dto.ViewStatsDto;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,10 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@AllArgsConstructor
 public class StatsController {
     private final StatsService statsService;
     private final String timePattern = "yyyy-MM-dd HH:mm:ss";
-
-    public StatsController(StatsService statsService) {
-        this.statsService = statsService;
-    }
 
     @PostMapping("/hit")
     public void createHit(@RequestBody EndpointHitDto endpointHitDto) {
