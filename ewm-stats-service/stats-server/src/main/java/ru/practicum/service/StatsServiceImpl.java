@@ -28,18 +28,13 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, Boolean unique, List<String> urisList) {
         List<EndpointHit> hits;
+        if (unique) {
+            hits = repository.getDistinctFirstByUriInAndTimestampBetween(urisList, start, end);
         if (urisList.isEmpty()) {
-            if (unique) {
-                hits = repository.getDistinctFirstByTimestampBetween(start, end);
-            } else {
                 hits = repository.getAllByTimestampBetween(start, end);
             }
         } else {
-            if (unique) {
-                hits = repository.getDistinctByUriInAndTimestampBetween(urisList, start, end);
-            } else {
-                hits = repository.getAllByUriInAndTimestampBetween(urisList, start, end);
-            }
+            hits = repository.getAllByUriInAndTimestampBetween(urisList, start, end);
         }
         var countHits = hits.stream().collect(Collectors.groupingBy(
                 EndpointHit::getUri, Collectors.counting()));

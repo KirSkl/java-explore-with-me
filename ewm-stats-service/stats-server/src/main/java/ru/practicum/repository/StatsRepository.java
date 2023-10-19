@@ -12,7 +12,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
     List<EndpointHit> getAllByTimestampBetween(LocalDateTime start, LocalDateTime end);
 
-    List<EndpointHit> getDistinctFirstByTimestampBetween(LocalDateTime start, LocalDateTime end);
+    List<EndpointHit> getDistinctFirstByUriInAndTimestampBetween(List<String> uris, LocalDateTime start, LocalDateTime end);
 
     List<EndpointHit> getAllByUriInAndTimestampBetween(List<String> uris, LocalDateTime start, LocalDateTime end);
 
