@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>stats-server</artifactId>
-
     <name>stats-server</name>
 
     <dependencies>

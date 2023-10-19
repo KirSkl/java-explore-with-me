@@ -1,18 +1,16 @@
 package dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HitDto {
+@Data
+public class EndpointHitDto {
     private Long id;
     @NotBlank(message = "Не указано название приложения")
     private String app;

@@ -1,4 +1,4 @@
-import dto.HitDto;
+import dto.EndpointHitDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> createHit(HitDto dto) {
+    public ResponseEntity<Object> createHit(EndpointHitDto dto) {
         return post("/hit", dto);
     }
 
