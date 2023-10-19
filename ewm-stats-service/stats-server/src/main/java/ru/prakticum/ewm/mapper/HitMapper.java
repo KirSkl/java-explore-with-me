@@ -1,9 +1,9 @@
-package server.mapper;
+package ru.prakticum.ewm.mapper;
 
 import dto.EndpointHitDto;
 import dto.ViewStatsDto;
 import lombok.experimental.UtilityClass;
-import server.model.EndpointHit;
+import ru.prakticum.ewm.model.EndpointHit;
 
 @UtilityClass
 public class HitMapper {

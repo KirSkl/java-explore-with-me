@@ -1,4 +1,4 @@
-package server.model;
+package ru.prakticum.ewm.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

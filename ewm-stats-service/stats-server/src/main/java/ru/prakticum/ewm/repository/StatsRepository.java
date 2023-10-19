@@ -1,8 +1,8 @@
-package server.repository;
+package ru.prakticum.ewm.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import server.model.EndpointHit;
+import ru.prakticum.ewm.model.EndpointHit;
 
 import java.time.LocalDateTime;
 import java.util.List;
