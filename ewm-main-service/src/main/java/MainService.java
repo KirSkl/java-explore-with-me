@@ -1,4 +1,4 @@
-package mainservice;
+package java;
 
 import org.springframework.boot.SpringApplication;
 
