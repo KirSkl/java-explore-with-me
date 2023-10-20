@@ -21,15 +21,21 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
     List<EndpointHit> getDistinctFirstByUriInAndTimestampBetween(List<String> uris, LocalDateTime start,
                                                                  LocalDateTime end);
 
-    @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(DISTINCT h.ip)) " +
+    @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(h.ip)) " +
             "FROM EndpointHit as h " +
             "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
             "GROUP BY h.uri, h.app")
     List<ViewStatsDto> getAllStats(LocalDateTime start, LocalDateTime end);
 
-    @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(h.ip)) " +
+    @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(DISTINCT h.ip)) " +
             "FROM EndpointHit as h " +
             "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
             "GROUP BY h.uri, h.app")
     List<ViewStatsDto> getAllStatsUnique(LocalDateTime start, LocalDateTime end);
+
+    @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(h.ip)) " +
+            "FROM EndpointHit as h " +
+            "WHERE h.uri IN (?1) AND h.timestamp BETWEEN ?2 AND ?3 " +
+            "GROUP BY h.uri, h.app")
+    List<ViewStatsDto> getAllStatsByUri(Iterable uris, LocalDateTime start, LocalDateTime end);
 }

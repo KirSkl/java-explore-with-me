@@ -38,7 +38,7 @@ public class StatsServiceImpl implements StatsService {
             if (unique) {
                 hits = repository.getDistinctFirstByUriInAndTimestampBetween(urisList, start, end);
             } else {
-                hits = repository.getAllByUriInAndTimestampBetween(urisList, start, end);
+                return repository.getAllStatsByUri(urisList, start, end);
             }
         }
         var countHits = hits.stream().collect(Collectors.groupingBy(
