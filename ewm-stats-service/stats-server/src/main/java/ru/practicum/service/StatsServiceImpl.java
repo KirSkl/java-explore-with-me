@@ -9,11 +9,7 @@ import ru.practicum.model.EndpointHit;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,17 +32,10 @@ public class StatsServiceImpl implements StatsService {
             }
         } else {
             if (unique) {
-                hits = repository.getDistinctFirstByUriInAndTimestampBetween(urisList, start, end);
+                return repository.getAllStatsByUriUnique(urisList, start, end);
             } else {
                 return repository.getAllStatsByUri(urisList, start, end);
             }
         }
-        var countHits = hits.stream().collect(Collectors.groupingBy(
-                EndpointHit::getUri, Collectors.counting()));
-        Set<ViewStatsDto> viewStatsDtoSet = new HashSet<>();
-        for (EndpointHit endpointHit : hits) {
-            viewStatsDtoSet.add(HitMapper.toViewStatsDto(endpointHit, countHits.get(endpointHit.getUri())));
-        }
-        return new ArrayList<>(viewStatsDtoSet);
     }
 }
