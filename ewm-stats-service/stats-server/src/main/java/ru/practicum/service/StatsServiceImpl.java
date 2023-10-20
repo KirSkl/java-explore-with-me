@@ -30,7 +30,7 @@ public class StatsServiceImpl implements StatsService {
         List<EndpointHit> hits;
         if (urisList.isEmpty()) {
             if (unique) {
-                hits = repository.getDistinctFirstByTimestampBetween(start, end);
+                return repository.getAllStatsUnique(start, end);
             } else {
                 return repository.getAllStats(start, end);
             }
