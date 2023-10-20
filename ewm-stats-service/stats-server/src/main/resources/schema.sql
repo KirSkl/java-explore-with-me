@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS hits; --закомментировать для корректной работы приложения
+--DROP TABLE IF EXISTS hits; --раскомментировать для многократного прохождения тестов
 
 CREATE TABLE IF NOT EXISTS hits
 (
