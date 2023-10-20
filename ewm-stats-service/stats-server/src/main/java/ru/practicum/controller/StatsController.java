@@ -35,10 +35,9 @@ public class StatsController {
     public List<ViewStatsDto> getStats(@RequestParam @DateTimeFormat(pattern = timePattern) LocalDateTime start,
                                        @RequestParam @DateTimeFormat(pattern = timePattern) LocalDateTime end,
                                        @RequestParam(defaultValue = "false") Boolean unique,
-                                       @RequestParam(required = false) List<String> uris) {
+                                       @RequestParam(required = false, defaultValue = "") List<String> uris) {
         log.info(String.format("Получен запрос GET /stats с параметрами: start = %s, end = %s, unique = %s, uris = %s",
                 start, end, unique, uris));
-        List<String> urisList = uris != null ? uris : new ArrayList<>();
-        return statsService.getStats(start, end, unique, urisList);
+        return statsService.getStats(start, end, unique, uris);
     }
 }
