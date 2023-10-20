@@ -36,6 +36,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
     @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(h.ip)) " +
             "FROM EndpointHit as h " +
             "WHERE h.uri IN (?1) AND h.timestamp BETWEEN ?2 AND ?3 " +
-            "GROUP BY h.uri, h.app")
+            "GROUP BY h.uri, h.app " +
+            "ORDER BY count(h.ip) DESC")
     List<ViewStatsDto> getAllStatsByUri(Iterable uris, LocalDateTime start, LocalDateTime end);
 }
