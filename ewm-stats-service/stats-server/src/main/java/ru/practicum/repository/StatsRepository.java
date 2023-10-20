@@ -22,7 +22,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
                                                                  LocalDateTime end);
 
     @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, count(h.uri)) " +
-            "FROM EndpointHit as h" +
+            "FROM EndpointHit as h " +
             "WHERE h.timestamp BETWEEN ?1 AND ?2" +
             "GROUP BY h.uri, h.app")
     List<ViewStatsDto> getAllStats(LocalDateTime start, LocalDateTime end);
