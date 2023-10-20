@@ -32,7 +32,7 @@ public class StatsServiceImpl implements StatsService {
             if (unique) {
                 hits = repository.getDistinctFirstByTimestampBetween(start, end);
             } else {
-                hits = repository.getAllByTimestampBetween(start, end);
+                return repository.getAllStats(start, end);
             }
         } else {
             if (unique) {
