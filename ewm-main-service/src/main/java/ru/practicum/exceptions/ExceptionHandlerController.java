@@ -17,4 +17,11 @@ public class ExceptionHandlerController {
     public Map<String, String> handleNotFoundException(NotFoundException e) {
         return Map.of("error:", "Не найдено", "errorMessage", e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> handleSqlConflictException(SqlConflictException e) {
+        return Map.of("error:", "For the requested operation the conditions are not met.",
+                "errorMessage", e.getMessage());
+    }
 }

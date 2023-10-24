@@ -1,14 +1,14 @@
 package ru.practicum.controller.admin;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Constants;
 import ru.practicum.common.PaginationUtil;
 import ru.practicum.dto.NewUserRequest;
 import ru.practicum.dto.UserDto;
-import ru.practicum.service.UserService;
+import ru.practicum.service.user.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -17,14 +17,11 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@AllArgsConstructor
 @RequestMapping(path = "/admin/users")
-public class UserController {
+public class UserControllerAdmin {
     private final UserService service;
 
-    @Autowired
-    public UserController(UserService service) {
-        this.service = service;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,7 +44,7 @@ public class UserController {
     @DeleteMapping("/{userId")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PositiveOrZero @PathVariable Long userId) {
-        log.info(String.format("Получен запрос DELETE /admin/users на удаление пользователя с id = %s", userId));
+        log.info(String.format("Получен запрос DELETE /admin/users/{userId} = %s на удаление пользователя", userId));
         service.deleteUser(userId);
     }
 }
