@@ -8,7 +8,7 @@ import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.exceptions.SqlConflictException;
 import ru.practicum.mapper.CategoryMapper;
-import ru.practicum.repository.category.CategoryRepository;
+import ru.practicum.repository.CategoryRepository;
 
 import javax.validation.ConstraintViolationException;
 
