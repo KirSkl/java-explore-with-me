@@ -2,6 +2,7 @@ package ru.practicum.model;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -48,6 +49,10 @@ public class Event {
     private EventState state;
     @Column(name = "title")
     private String title;
+    @Formula(value = "SELECT COUNT(r.id) FROM requests AS r WHERE r.event_id = id AND r.status LIKE 'CONFIRMED'")
+    private Integer confirmedRequests;
+    @Transient
+    private Long views;
 
     @Override
     public boolean equals(Object o) {

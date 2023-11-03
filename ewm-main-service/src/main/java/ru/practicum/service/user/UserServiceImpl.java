@@ -1,14 +1,13 @@
 package ru.practicum.service.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.NewUserRequest;
-import ru.practicum.dto.UserDto;
+import ru.practicum.dto.user.NewUserRequest;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.UserMapper;
 import ru.practicum.repository.UserRepository;
-import ru.practicum.service.user.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsers(int positionToPage, int size, List<Integer> ids) {
+    public List<UserDto> getUsers(Pageable page, List<Integer> ids) {
         if (!ids.isEmpty()) {
             return repository.getUsersByIdIn(ids).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
         }
-        return repository.getAll(PageRequest.of(positionToPage, size)).stream().map(UserMapper::toUserDto)
+        return repository.getAll(page).stream().map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 

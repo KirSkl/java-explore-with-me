@@ -16,6 +16,7 @@ import javax.validation.ConstraintViolationException;
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+
     @Override
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
         return CategoryMapper.toCategoryDto(repository.save(CategoryMapper.toCategory(newCategoryDto)));

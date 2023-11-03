@@ -17,4 +17,6 @@ public class Validator {
         userRepository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         }*/
 
+    /*public void validateEventDates*/
+
 }

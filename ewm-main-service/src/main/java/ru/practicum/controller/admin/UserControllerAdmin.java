@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Constants;
 import ru.practicum.common.PaginationUtil;
-import ru.practicum.dto.NewUserRequest;
-import ru.practicum.dto.UserDto;
+import ru.practicum.dto.user.NewUserRequest;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.service.user.UserService;
 
 import javax.validation.Valid;
@@ -38,7 +38,7 @@ public class UserControllerAdmin {
                                   int size) {
         log.info(String.format("Получен запрос GET /admin/users на получение списка пользователей с id = %s, " +
                 "начиная с %s, по %s на странице", ids, from, size));
-        return service.getUsers(PaginationUtil.positionToPage(from, size), size, ids);
+        return service.getUsers(PaginationUtil.toPageRequest(from, size), ids);
     }
 
     @DeleteMapping("/{userId")

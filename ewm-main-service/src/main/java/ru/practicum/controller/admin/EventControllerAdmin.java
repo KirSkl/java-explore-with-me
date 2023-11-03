@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.common.Constants;
+import ru.practicum.common.PaginationUtil;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.exceptions.InvalidDatesException;
 import ru.practicum.model.EventState;
 import ru.practicum.service.event.EventService;
 
@@ -26,16 +28,20 @@ public class EventControllerAdmin {
     public List<EventFullDto> getEvents(@RequestParam(defaultValue = "") List<Long> users,
                                         @RequestParam(defaultValue = "") List<EventState> states,
                                         @RequestParam(defaultValue = "") List<Long> categories,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                        @RequestParam(required = false) @DateTimeFormat(pattern = Constants.TIME_PATTERN)
                                         LocalDateTime rangeStart,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                        @RequestParam(required = false) @DateTimeFormat(pattern = Constants.TIME_PATTERN)
                                         LocalDateTime rangeEnd,
                                         @RequestParam(defaultValue = Constants.DEFAULT_FROM) int from,
                                         @RequestParam(defaultValue = Constants.DEFAULT_SIZE) int size) {
         log.info(String.format("Получен запрос GET /admin/events с параметрами users=%s, states=%s, categories=%s, " +
                         "rangeStart=%s, rangeEnd=%s, from=%s, size=%s",
                 users, states, categories, rangeStart, rangeEnd, from, size));
-        return service.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+        if (!rangeStart.isBefore(rangeEnd)) {
+            throw new InvalidDatesException("Неверные даты");
+        }
+        return service.getEvents(users, states, categories, rangeStart, rangeEnd,
+                PaginationUtil.toPageRequest(from, size));
     }
 
 }
