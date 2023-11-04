@@ -7,4 +7,6 @@ import ru.practicum.dto.compilation.NewCompilationDto;
 @Service
 public interface CompilationService {
     CompilationDto addCompilation(NewCompilationDto compilationDto);
+
+    void deleteCompilation(Integer compId);
 }

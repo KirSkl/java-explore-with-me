@@ -23,4 +23,11 @@ public class CompilationControllerAdmin {
         log.info("Получен запрос POST /admin/compilation");
         return service.addCompilation(compilationDto);
     }
+
+    @DeleteMapping("{/compId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompilation(@PathVariable Integer compId) {
+        log.info(String.format("Получен запрос DELETE /admin/compilation/{compId} = %s", compId));
+        service.deleteCompilation(compId);
+    }
 }

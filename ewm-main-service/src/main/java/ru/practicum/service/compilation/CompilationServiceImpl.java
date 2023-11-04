@@ -1,19 +1,14 @@
 package ru.practicum.service.compilation;
 
-import client.StatsClient;
-import dto.ViewStatsDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
+import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.CompilationMapper;
-import ru.practicum.model.Event;
 import ru.practicum.repository.CompilationRepository;
 import ru.practicum.repository.EventRepository;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -28,5 +23,12 @@ public class CompilationServiceImpl implements CompilationService {
         events.forEach(statsUtil::setEventViews);
         return CompilationMapper.toCompilationDto(
                 repository.save(CompilationMapper.toCompilation(compilationDto, events)));
+    }
+
+    @Override
+    public void deleteCompilation(Integer compId) {
+        if (repository.deleteByIdAndReturnCount(compId) == 0) {
+            throw new NotFoundException("Подборка не найдена");
+        }
     }
 }
