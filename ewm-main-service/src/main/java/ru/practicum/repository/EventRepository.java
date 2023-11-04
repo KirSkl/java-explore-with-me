@@ -2,14 +2,15 @@ package ru.practicum.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.practicum.model.Event;
 import ru.practicum.model.EventState;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e from Event e " +
@@ -21,3 +22,4 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> getEventsAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page);
 }
+

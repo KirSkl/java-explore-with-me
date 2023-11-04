@@ -3,13 +3,11 @@ package ru.practicum.controller.admin;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Constants;
 import ru.practicum.common.PaginationUtil;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.exceptions.InvalidDatesException;
 import ru.practicum.model.EventState;
 import ru.practicum.service.event.EventService;
@@ -42,6 +40,12 @@ public class EventControllerAdmin {
         }
         return service.getEvents(users, states, categories, rangeStart, rangeEnd,
                 PaginationUtil.toPageRequest(from, size));
+    }
+
+    @PatchMapping("/{eventId}")
+    public EventFullDto patchEvent(@PathVariable Long eventId, @RequestBody UpdateEventAdminRequest request) {
+        log.info(String.format("Получен запрос PATCH /admin/events/{eventId} = %s", eventId));
+        return service.updateEvent(eventId, request);
     }
 
 }
