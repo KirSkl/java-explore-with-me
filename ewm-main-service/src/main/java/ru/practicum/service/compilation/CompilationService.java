@@ -9,4 +9,6 @@ public interface CompilationService {
     CompilationDto addCompilation(NewCompilationDto compilationDto);
 
     void deleteCompilation(Integer compId);
+
+    CompilationDto updateCompilation(Integer compId, NewCompilationDto compilationDto);
 }

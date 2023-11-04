@@ -31,4 +31,22 @@ public class CompilationServiceImpl implements CompilationService {
             throw new NotFoundException("Подборка не найдена");
         }
     }
+
+    @Override
+    public CompilationDto updateCompilation(Integer compId, NewCompilationDto compilationDto) {
+        var oldComp = repository.findById(compId).orElseThrow(()
+                -> new NotFoundException("Подборка не найдена"));
+        if (compilationDto.getEvents() != null) {
+            var events = eventRepository.findAllById(compilationDto.getEvents());
+            events.forEach(statsUtil::setEventViews);
+            oldComp.setEvents(events);
+        }
+        if (compilationDto.getPinned() != null) {
+            oldComp.setPinned(compilationDto.getPinned());
+        }
+        if (compilationDto.getTitle() != null) {
+            oldComp.setTitle(compilationDto.getTitle());
+        }
+        return CompilationMapper.toCompilationDto(repository.save(oldComp));
+    }
 }
