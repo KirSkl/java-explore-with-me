@@ -18,7 +18,7 @@ public class ParticipationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
