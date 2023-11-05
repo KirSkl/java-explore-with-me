@@ -1,6 +1,7 @@
 package ru.practicum.service.compilation;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.compilation.CompilationDto;
@@ -9,6 +10,9 @@ import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.repository.CompilationRepository;
 import ru.practicum.repository.EventRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -48,5 +52,17 @@ public class CompilationServiceImpl implements CompilationService {
             oldComp.setTitle(compilationDto.getTitle());
         }
         return CompilationMapper.toCompilationDto(repository.save(oldComp));
+    }
+
+    @Override
+    public List<CompilationDto> getCompilations(Boolean pinned, PageRequest toPageRequest) {
+        return repository.findAllByPinned(pinned, toPageRequest).stream()
+                .map(CompilationMapper::toCompilationDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public CompilationDto getCompilation(Integer compId) {
+        return CompilationMapper.toCompilationDto(repository.findById(compId).orElseThrow(()
+                -> new NotFoundException("Подборка не найдена")));
     }
 }
