@@ -2,10 +2,8 @@ package ru.practicum.controller.priv;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.request.RequestService;
 
@@ -22,5 +20,14 @@ public class RequestControllerPrivate {
     public List<ParticipationRequestDto> findRequests(@PathVariable Long userId) {
         log.info(String.format("Получен запрос GET /users/{userId} = %s /requests"));
         return service.getRequests(userId);
+    }
+
+    @PostMapping("/{userId}/requests")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ParticipationRequestDto addRequest(@PathVariable Long userId, @RequestParam Long eventId) {
+        log.info(String.format(
+                "Получен запрос POST /users/{userId} = %s /requests на добавления заявки участия в событии с id = %s",
+                userId, eventId));
+        return service.createRequest(userId, eventId);
     }
 }
