@@ -30,4 +30,12 @@ public class RequestControllerPrivate {
                 userId, eventId));
         return service.createRequest(userId, eventId);
     }
+
+    @PatchMapping("/{userId}/requests/{requestId}/cancel")
+    public ParticipationRequestDto cancelRequest(@PathVariable Long userId, @PathVariable Integer requestId) {
+        log.info(String.format(
+                "Получен запрос PATCH /users/{userId}= %s/{requestId} = %s/cancel на отмену заявки участия в событии",
+                userId, requestId));
+        return service.cancelRequest(userId, requestId);
+    }
 }

@@ -8,6 +8,7 @@ import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.model.EventState;
 import ru.practicum.model.RequestStatus;
+import ru.practicum.model.User;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
 
@@ -31,8 +32,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
-        var requester = userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь не найден"));
+        var requester = checkUserIsExistsAndGet(userId);
         var event = eventRepository.findById(eventId).orElseThrow(()
                 -> new NotFoundException("Событие не найдено"));
         if (!event.getState().equals(EventState.PUBLISHED)) {
@@ -56,5 +56,22 @@ public class RequestServiceImpl implements RequestService {
         }
         return RequestMapper.toParticipationRequestDto(repository.save(
                 RequestMapper.toParticipationRequest(request, event, requester)));
+    }
+
+    @Override
+    public ParticipationRequestDto cancelRequest(Long userId, Integer requestId) {
+        var User = checkUserIsExistsAndGet(userId);
+        var request = repository.findById(Long.valueOf(requestId)).orElseThrow(()
+                -> new NotFoundException("Запрос не найден"));
+        if (request.getRequester().getId() != userId) {
+            throw new DataConflictException("Можно отменить только свою заявку");
+        }
+        request.setStatus(RequestStatus.CANCELLED);
+        return RequestMapper.toParticipationRequestDto(repository.save(request));
+    }
+
+    private User checkUserIsExistsAndGet(Long userId) {
+        return userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь не найден"));
     }
 }
