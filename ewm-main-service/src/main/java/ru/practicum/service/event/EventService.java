@@ -2,10 +2,7 @@ package ru.practicum.service.event;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventAdminRequest;
+import ru.practicum.dto.event.*;
 import ru.practicum.model.EventState;
 
 import java.time.LocalDateTime;
@@ -20,4 +17,8 @@ public interface EventService {
     List<EventShortDto> getUserEvents(Long userId, PageRequest toPageRequest);
 
     EventFullDto createEvent(Long userId, NewEventDto eventDto);
+
+    EventFullDto showMyEvent(Long userId, Long eventId);
+
+    EventFullDto updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest request);
 }
