@@ -3,17 +3,23 @@ package ru.practicum.service.event;
 import client.StatsClient;
 import dto.ViewStatsDto;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.EventShortDto;
+import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.exceptions.ConflictEventStateException;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Event;
 import ru.practicum.model.EventState;
+import ru.practicum.model.User;
+import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
+import ru.practicum.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +29,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
     private final StatsUtil statsUtil;
 
     @Override
@@ -82,5 +90,24 @@ public class EventServiceImpl implements EventService {
             oldEvent.setTitle(oldEvent.getTitle());
         }
         return EventMapper.toEventFullDto(repository.save(oldEvent));
+    }
+
+    @Override
+    public List<EventShortDto> getUserEvents(Long userId, PageRequest toPageRequest) {
+        return repository.findAllByInitiatorId(userId, toPageRequest).stream()
+                .map(EventMapper::toEventShortDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public EventFullDto createEvent(Long userId, NewEventDto eventDto) {
+        var cat = categoryRepository.findById(Long.valueOf(eventDto.getCategory())).orElseThrow(()
+        -> new NotFoundException("Соответствующая категория не найдена"));
+        var initiator = checkUserIsExistsAndGet(userId);
+        return EventMapper.toEventFullDto(repository.save(EventMapper.toEvent(eventDto, cat, initiator)));
+    }
+
+    private User checkUserIsExistsAndGet(Long userId) {
+        return userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь не найден"));
     }
 }

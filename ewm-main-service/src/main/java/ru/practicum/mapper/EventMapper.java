@@ -3,7 +3,13 @@ package ru.practicum.mapper;
 import lombok.experimental.UtilityClass;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
+import ru.practicum.dto.event.NewEventDto;
+import ru.practicum.model.Category;
 import ru.practicum.model.Event;
+import ru.practicum.model.EventState;
+import ru.practicum.model.User;
+
+import java.time.LocalDateTime;
 
 @UtilityClass
 public class EventMapper {
@@ -40,6 +46,27 @@ public class EventMapper {
                 event.getPaid(),
                 event.getTitle(),
                 event.getViews()
+        );
+    }
+
+    public Event toEvent(NewEventDto eventDto, Category category, User initiator) {
+        return new Event(
+                null,
+                eventDto.getAnnotation(),
+                category,
+                LocalDateTime.now(),
+                eventDto.getDescription(),
+                eventDto.getEventDate(),
+                initiator,
+                eventDto.getLocation(),
+                eventDto.getPaid() == null ? Boolean.valueOf("false") : eventDto.getPaid(),
+                eventDto.getParticipantLimit(),
+                null,
+                eventDto.getRequestModeration(),
+                EventState.PENDING,
+                eventDto.getTitle(),
+                null,
+                null
         );
     }
 }

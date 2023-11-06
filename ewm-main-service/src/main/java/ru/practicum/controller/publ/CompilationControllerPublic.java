@@ -3,6 +3,7 @@ package ru.practicum.controller.publ;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.common.Constants;
 import ru.practicum.common.PaginationUtil;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.service.compilation.CompilationService;
@@ -20,8 +21,11 @@ public class CompilationControllerPublic {
     private final CompilationService service;
 
     @GetMapping
-    public List<CompilationDto> getCompilations(@RequestParam Boolean pinned, @PositiveOrZero @RequestParam Integer from,
-                                                @Positive @RequestParam Integer size) {
+    public List<CompilationDto> getCompilations(@RequestParam Boolean pinned,
+                                                @PositiveOrZero @RequestParam(required = false,
+                                                        defaultValue = Constants.DEFAULT_FROM) int from,
+                                                @Positive @RequestParam(required = false,
+                                                        defaultValue = Constants.DEFAULT_SIZE) int size) {
         log.info(String.format(
                 "Получен запрос GET /compilations на получение списка подборок (pinned = %s, from = %s, size = %s)",
                 pinned, from, size));
