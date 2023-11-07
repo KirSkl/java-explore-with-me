@@ -2,6 +2,7 @@ package ru.practicum.controller.priv;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Constants;
@@ -10,7 +11,9 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.event.EventService;
+import ru.practicum.service.request.RequestService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -55,4 +58,12 @@ public class EventControllerPrivate {
                 "на редактирование информации о событии", userId, eventId));
         return service.updateUserEvent(userId, eventId, request);
     }
+
+    @GetMapping("/{eventId}/requests")
+    public List<ParticipationRequestDto> findEventRequests(@PathVariable Long userId, @PathVariable Long eventId) {
+        log.info(String.format("Получен запрос GET /users/{userId} = %s/events/{eventId} = %s /requests " +
+                "на получение списка заявок на участие в событии", userId, eventId));
+        return service.getEventRequests(userId, eventId);
+    }
+
 }

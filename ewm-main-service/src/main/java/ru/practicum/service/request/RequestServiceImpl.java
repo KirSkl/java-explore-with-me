@@ -10,6 +10,7 @@ import ru.practicum.model.EventState;
 import ru.practicum.model.RequestStatus;
 import ru.practicum.model.User;
 import ru.practicum.repository.EventRepository;
+import ru.practicum.repository.RequestRepository;
 import ru.practicum.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -69,6 +70,8 @@ public class RequestServiceImpl implements RequestService {
         request.setStatus(RequestStatus.CANCELLED);
         return RequestMapper.toParticipationRequestDto(repository.save(request));
     }
+
+
 
     private User checkUserIsExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
