@@ -1,5 +1,7 @@
 package ru.practicum.service.event;
 
+import client.StatsClient;
+import dto.EndpointHitDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.RequestRepository;
 import ru.practicum.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
     private final StatsUtil statsUtil;
+    private final StatsClient statsClient;
 
     @Override
     public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
@@ -176,6 +180,19 @@ public class EventServiceImpl implements EventService {
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
 
 }
+
+    @Override
+    public EventFullDto getEvent(Long id, HttpServletRequest request) {
+        var event = repository.findByIdAndState(id, EventState.PUBLISHED).orElseThrow(()
+        -> new NotFoundException(String.format("Event with id=%s was not found", id)));
+        addView(request.getRequestURI(), request.getRemoteAddr());
+        statsUtil.setEventViews(event);
+        return EventMapper.toEventFullDto(event);
+    }
+
+    private void addView(String uri, String ip) {
+        statsClient.createHit(new EndpointHitDto(null, "ewm-main-service", uri, ip, LocalDateTime.now()));
+    }
 
     private User checkUserIsExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
