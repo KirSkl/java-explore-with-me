@@ -26,6 +26,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getRequests(Long userId) {
+        checkUserIsExistsAndGet(userId);
         return repository.findAllByRequesterId(userId).stream()
                 .map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
 
@@ -37,19 +38,17 @@ public class RequestServiceImpl implements RequestService {
         var event = eventRepository.findById(eventId).orElseThrow(()
                 -> new NotFoundException("Событие не найдено"));
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new DataConflictException(String.format("The event by the id=%d is not published", event.getId()));
+            throw new DataConflictException("The event is not in the right status: PUBLISHED");
         }
         if (event.getInitiator().equals(requester)) {
-            throw new DataConflictException(String.format("The requester by the id=%d is the initiator of the event " +
-                    "by the id=%d", requester.getId(), event.getId()));
+            throw new DataConflictException("The requester is the initiator of the event");
         }
         if (repository.findByEventIdAndRequesterId(eventId, userId) != null) {
-            throw new DataConflictException(String.format("There is already a request from this user by the id=%d to " +
-                    "the event by the id=%d", userId, eventId));
+            throw new DataConflictException("There is already a request from user to the event");
         }
-        if (event.getConfirmedRequests() + 1 > event.getParticipantLimit() && event.getParticipantLimit() != 0) {
-            throw new DataConflictException(String.format("The event by the id=%d has already reached its " +
-                    "participant limit=%d", event.getId(), event.getParticipantLimit()));
+        if (event.getConfirmedRequests() >= event.getParticipantLimit() && event.getParticipantLimit() != 0) {
+            throw new DataConflictException(String.format("The event has already reached its participant limit=%s",
+                    event.getParticipantLimit()));
         }
         var request = new ParticipationRequestDto(null, LocalDateTime.now(), eventId, userId, RequestStatus.PENDING);
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
@@ -64,14 +63,9 @@ public class RequestServiceImpl implements RequestService {
         var User = checkUserIsExistsAndGet(userId);
         var request = repository.findById(Long.valueOf(requestId)).orElseThrow(()
                 -> new NotFoundException("Запрос не найден"));
-        if (request.getRequester().getId() != userId) {
-            throw new DataConflictException("Можно отменить только свою заявку");
-        }
         request.setStatus(RequestStatus.CANCELLED);
         return RequestMapper.toParticipationRequestDto(repository.save(request));
     }
-
-
 
     private User checkUserIsExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()

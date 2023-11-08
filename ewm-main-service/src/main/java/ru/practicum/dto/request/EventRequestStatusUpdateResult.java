@@ -7,5 +7,5 @@ import java.util.List;
 @AllArgsConstructor
 public class EventRequestStatusUpdateResult {
     private List<ParticipationRequestDto> confirmedRequests;
-    private java.util.List<ParticipationRequestDto> rejectedRequests;
+    private List<ParticipationRequestDto> rejectedRequests;
 }
