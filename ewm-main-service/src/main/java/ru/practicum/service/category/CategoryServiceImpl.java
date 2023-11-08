@@ -2,6 +2,7 @@ package ru.practicum.service.category;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.NewCategoryDto;
@@ -11,6 +12,8 @@ import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.repository.CategoryRepository;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +45,18 @@ public class CategoryServiceImpl implements CategoryService {
             throw new NotFoundException(
                     String.format("Category with id = %s was not found", catId));
         }
+    }
+
+    @Override
+    public List<CategoryDto> getCategories(PageRequest toPageRequest) {
+        return repository.findAll(toPageRequest).stream()
+                .map(CategoryMapper::toCategoryDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDto getCategory(Long catId) {
+        var cat = repository.findById(catId).orElseThrow(()
+                -> new NotFoundException(String.format("Category with id=%s was not found", catId)));
+        return CategoryMapper.toCategoryDto(cat);
     }
 }

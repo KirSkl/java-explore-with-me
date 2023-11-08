@@ -9,7 +9,6 @@ import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.service.category.CategoryService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.PositiveOrZero;
 
 @AllArgsConstructor
 @RestController

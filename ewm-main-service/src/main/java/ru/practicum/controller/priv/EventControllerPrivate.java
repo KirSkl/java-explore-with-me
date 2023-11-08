@@ -2,7 +2,6 @@ package ru.practicum.controller.priv;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Constants;
@@ -15,7 +14,6 @@ import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.event.EventService;
-import ru.practicum.service.request.RequestService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -74,4 +72,5 @@ public class EventControllerPrivate {
         log.info(String.format("Получен запрос PATCH /users/{userId} = %s/events/{eventId} = %s /requests " +
                 "на изменение статуса заявки", userId, eventId));
         return service.updateRequestStatus(userId, eventId, request);
+    }
 }

@@ -12,6 +12,8 @@ import ru.practicum.exceptions.InvalidDatesException;
 import ru.practicum.model.EventState;
 import ru.practicum.service.event.EventService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,12 +28,12 @@ public class EventControllerAdmin {
     public List<EventFullDto> getEvents(@RequestParam(defaultValue = "") List<Long> users,
                                         @RequestParam(defaultValue = "") List<EventState> states,
                                         @RequestParam(defaultValue = "") List<Long> categories,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = Constants.TIME_PATTERN)
-                                        LocalDateTime rangeStart,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = Constants.TIME_PATTERN)
-                                        LocalDateTime rangeEnd,
-                                        @RequestParam(defaultValue = Constants.DEFAULT_FROM) int from,
-                                        @RequestParam(defaultValue = Constants.DEFAULT_SIZE) int size) {
+                                        @RequestParam(required = false)
+                                            @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeStart,
+                                        @RequestParam(required = false)
+                                            @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeEnd,
+                                        @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM) int from,
+                                        @Positive @RequestParam(defaultValue = Constants.DEFAULT_SIZE) int size) {
         log.info(String.format("Получен запрос GET /admin/events с параметрами users=%s, states=%s, categories=%s, " +
                         "rangeStart=%s, rangeEnd=%s, from=%s, size=%s",
                 users, states, categories, rangeStart, rangeEnd, from, size));

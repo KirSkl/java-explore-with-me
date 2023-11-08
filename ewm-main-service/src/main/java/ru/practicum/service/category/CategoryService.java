@@ -1,8 +1,11 @@
 package ru.practicum.service.category;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.NewCategoryDto;
+
+import java.util.List;
 
 public interface CategoryService {
     CategoryDto createCategory(NewCategoryDto newCategoryDto);
@@ -10,4 +13,8 @@ public interface CategoryService {
     void deleteCategory(Long catId);
 
     CategoryDto updateCategory(Long catId, NewCategoryDto newCategoryDto);
+
+    List<CategoryDto> getCategories(PageRequest toPageRequest);
+
+    CategoryDto getCategory(Long catId);
 }
