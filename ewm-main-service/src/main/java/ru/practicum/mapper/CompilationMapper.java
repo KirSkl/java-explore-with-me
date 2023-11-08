@@ -16,7 +16,7 @@ public class CompilationMapper {
         var comp = new Compilation();
         comp.setEvents(events);
         if(compilationDto.getPinned() == null) {
-            comp.setPinned(Boolean.valueOf("false"));
+            comp.setPinned(false);
         } else {
             comp.setPinned(compilationDto.getPinned());
         }

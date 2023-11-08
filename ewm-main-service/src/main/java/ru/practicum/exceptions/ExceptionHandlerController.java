@@ -21,7 +21,7 @@ public class ExceptionHandlerController {
         return new ApiError("NOT_FOUND", "Please check your request", e.getMessage(), LocalDateTime.now());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler///?????
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleConflictException(DataConflictException e) {
         return new ApiError("CONFLICT", "There is some conflict", e.getMessage(), LocalDateTime.now());
@@ -29,9 +29,23 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> handleSqlConflictException(SqlConflictException e) {
-        return Map.of("error:", "For the requested operation the conditions are not met.",
-                "errorMessage", e.getMessage());
+    public ApiError handleInvalidDatesException(InvalidDatesException e) {
+        return new ApiError("FORBIDDEN", "For the requested operation the conditions are not met.",
+                e.getMessage(), LocalDateTime.now());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleEditNotAllowException(EditNotAllowException e) {
+        return new ApiError("FORBIDDEN", "For the requested operation the conditions are not met.",
+                e.getMessage(), LocalDateTime.now());
+    }
+
+
+    @ExceptionHandler///?????
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleValidationException(ValidationException e) {
+        return new ApiError("BAD_REQUEST", "Incorrectly made request", e.getMessage(), LocalDateTime.now());
     }
 
     @Getter

@@ -3,7 +3,6 @@ package ru.practicum.common;
 import client.StatsClient;
 import dto.ViewStatsDto;
 import lombok.AllArgsConstructor;
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 import ru.practicum.model.Event;
 

@@ -1,21 +1,19 @@
 package ru.practicum.service.event;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.event.*;
+import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.exceptions.ConflictEventStateException;
-import ru.practicum.exceptions.DataConflictException;
-import ru.practicum.exceptions.NotFoundException;
+import ru.practicum.exceptions.*;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
-import ru.practicum.model.Category;
-import ru.practicum.model.Event;
-import ru.practicum.model.EventState;
-import ru.practicum.model.User;
+import ru.practicum.model.*;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.RequestRepository;
@@ -27,7 +25,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
     private final UserRepository userRepository;
@@ -51,25 +49,33 @@ public class EventServiceImpl implements EventService {
             switch (request.getStateAction()) {
                 case REJECT_EVENT:
                     if (oldEvent.getState().equals(EventState.PUBLISHED)) {
-                        throw new ConflictEventStateException("Нельзя отменить публикацию опубликованное события");
+                        throw new EditNotAllowException("Cannot reject the event because it's in the state: PUBLISHED");
                     }
                     oldEvent.setState(EventState.CANCELLED);
                     break;
                 case PUBLISH_EVENT:
                     if (!oldEvent.getState().equals(EventState.PENDING)) {
-                        throw new ConflictEventStateException("Опубликовать можно только событие, ожидающее публикации");
+                        throw new EditNotAllowException("Cannot publish the event because " +
+                                "it's not in the right state: PUBLISHED");
                     }
                     oldEvent.setState(EventState.PUBLISHED);
                     break;
             }
         }
-        var updateEvent = repository.save(update(oldEvent, EventMapper.toUpdateEventRequest(request)));
+        var updateEvent = update(oldEvent, EventMapper.toUpdateEventRequest(request));
+        if(updateEvent.getState().equals(EventState.PUBLISHED) &&
+                updateEvent.getEventDate().isBefore(LocalDateTime.now().minusHours(1L))) {
+            throw new InvalidDatesException(String.format("Field: eventDate. Error: Нельзя опубликовать событие " +
+                    "позднее, чем за час после его начала. Value: %s", updateEvent.getEventDate()));
+        }
+        updateEvent = repository.save(updateEvent);
         statsUtil.setEventViews(updateEvent);
         return EventMapper.toEventFullDto(updateEvent);
     }
 
     @Override
     public List<EventShortDto> getUserEvents(Long userId, PageRequest toPageRequest) {
+        checkUserIsExistsAndGet(userId);
         var events = repository.findAllByInitiatorId(userId, toPageRequest);
         events.forEach(statsUtil::setEventViews);
         return events.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
@@ -77,6 +83,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto eventDto) {
+        checkDates(eventDto.getEventDate());
         return EventMapper.toEventFullDto(repository.save(EventMapper.toEvent(eventDto,
                 checkCategoryIsExistsAndGet(eventDto.getCategory()), checkUserIsExistsAndGet(userId))));
     }
@@ -85,21 +92,16 @@ public class EventServiceImpl implements EventService {
     public EventFullDto showMyEvent(Long userId, Long eventId) {
         var user = checkUserIsExistsAndGet(userId);
         var event = checkEventIsExistsAndGet(eventId);
-        if (!event.getInitiator().equals(user)) {
-            throw new DataConflictException("Событие добавлено другим пользователем");
-        }
         statsUtil.setEventViews(event);
         return EventMapper.toEventFullDto(event);
     }
 
     @Override
     public EventFullDto updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest request) {
+        checkUserIsExistsAndGet(userId);
         var oldEvent = checkEventIsExistsAndGet(eventId);
         if(!oldEvent.getState().equals(EventState.PUBLISHED)) {
-            throw new DataConflictException("Нельзя изменить опубликованное событие");
-        }
-        if(!Objects.equals(checkUserIsExistsAndGet(userId).getId(), oldEvent.getInitiator().getId())) {
-            throw new DataConflictException("Изменить можно только свое событие");
+            throw new DataConflictException("Event must not be published");
         }
         if(request.getStateAction() != null) {
             switch (request.getStateAction()) {
@@ -110,18 +112,29 @@ public class EventServiceImpl implements EventService {
                     oldEvent.setState(EventState.PENDING);
             }
         }
-        var updateEvent = repository.save(update(oldEvent, EventMapper.toUpdateEventRequest(request)));
+        var updateEvent = update(oldEvent, EventMapper.toUpdateEventRequest(request));
+        checkDates(oldEvent.getEventDate());
+        updateEvent = repository.save(updateEvent);
         statsUtil.setEventViews(updateEvent);
         return EventMapper.toEventFullDto(updateEvent);
     }
 
     @Override
     public List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId) {
-        if(!checkEventIsExistsAndGet(eventId).getInitiator().getId().equals(userId)) {
-            throw new DataConflictException("Событие добавлено не этим пользователем");
-        };
+        checkUserIsExistsAndGet(userId);
+        checkEventIsExistsAndGet(eventId);
         return requestRepository.findAllByEventId(eventId).stream()
                 .map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId,
+                                                              EventRequestStatusUpdateRequest request) {
+        var user = checkUserIsExistsAndGet(userId);
+        var event = checkEventIsExistsAndGet(eventId);
+        List<Integer> ids = request.getRequestIds();
+        List<ParticipationRequest> requests = requestRepository.findAllByIdIn(ids);
+        return null;
     }
 
     private User checkUserIsExistsAndGet(Long userId) {
@@ -168,5 +181,12 @@ public class EventServiceImpl implements EventService {
     private Category checkCategoryIsExistsAndGet(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(()
                 -> new NotFoundException("Соответствующая категория не найдена"));
+    }
+
+    private void checkDates(LocalDateTime start) {
+        if(start.isAfter(LocalDateTime.now().plusHours(2L))) {
+            throw new InvalidDatesException(String.format(
+                    "Field: eventDate. Error: должно содержать дату, которая еще не наступила. Value: %s", start));
+        }
     }
 }

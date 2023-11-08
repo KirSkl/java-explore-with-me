@@ -11,6 +11,8 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.RequestService;
@@ -66,4 +68,10 @@ public class EventControllerPrivate {
         return service.getEventRequests(userId, eventId);
     }
 
+    @PatchMapping("/{eventId}/requests")
+    public EventRequestStatusUpdateResult changeRequestStatus(@PathVariable Long userId, @PathVariable Long eventId,
+                                                              @RequestBody EventRequestStatusUpdateRequest request) {
+        log.info(String.format("Получен запрос PATCH /users/{userId} = %s/events/{eventId} = %s /requests " +
+                "на изменение статуса заявки", userId, eventId));
+        return service.updateRequestStatus(userId, eventId, request);
 }

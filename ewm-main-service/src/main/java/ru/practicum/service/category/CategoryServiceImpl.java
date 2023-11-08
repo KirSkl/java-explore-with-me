@@ -1,19 +1,19 @@
 package ru.practicum.service.category;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.NewCategoryDto;
+import ru.practicum.exceptions.DataConflictException;
 import ru.practicum.exceptions.NotFoundException;
-import ru.practicum.exceptions.SqlConflictException;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.repository.CategoryRepository;
 
 import javax.validation.ConstraintViolationException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
 
@@ -29,9 +29,8 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException(
                     String.format("Category with id = %s was not found", catId));
-            //отловить еще одно исключение
         } catch (ConstraintViolationException e) {
-            throw new SqlConflictException("The category is not empty");
+            throw new DataConflictException("The category is not empty");
         }
     }
 
@@ -42,6 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException(
                     String.format("Category with id = %s was not found", catId));
-        }        //отловить второе сразу в хендлере
+        }
     }
 }
