@@ -12,7 +12,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
