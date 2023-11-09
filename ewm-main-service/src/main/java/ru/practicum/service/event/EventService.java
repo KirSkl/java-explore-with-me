@@ -31,4 +31,8 @@ public interface EventService {
     EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest request);
 
     EventFullDto getEvent(Long id, HttpServletRequest request);
+
+    List<EventShortDto> findAllEventsPublic(String text, List<Integer> categories, Boolean paid,
+                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
+                                            String sort, HttpServletRequest request, PageRequest toPageRequest);
 }

@@ -12,10 +12,7 @@ import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.exceptions.DataConflictException;
-import ru.practicum.exceptions.EditNotAllowException;
-import ru.practicum.exceptions.InvalidDatesException;
-import ru.practicum.exceptions.NotFoundException;
+import ru.practicum.exceptions.*;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.model.*;
@@ -27,6 +24,7 @@ import ru.practicum.repository.UserRepository;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -172,22 +170,57 @@ public class EventServiceImpl implements EventService {
             }
         }
         if (Objects.equals(event.getConfirmedRequests(), event.getParticipantLimit())) {
-            for (ParticipationRequest req: requestRepository.findAllByStatus(RequestStatus.PENDING)) {
+            for (ParticipationRequest req : requestRepository.findAllByStatus(RequestStatus.PENDING)) {
                 req.setStatus(RequestStatus.REJECTED);
                 rejectedRequests.add(RequestMapper.toParticipationRequestDto(requestRepository.save(req)));
             }
         }
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
 
-}
+    }
 
     @Override
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
         var event = repository.findByIdAndState(id, EventState.PUBLISHED).orElseThrow(()
-        -> new NotFoundException(String.format("Event with id=%s was not found", id)));
+                -> new NotFoundException(String.format("Event with id=%s was not found", id)));
         addView(request.getRequestURI(), request.getRemoteAddr());
         statsUtil.setEventViews(event);
         return EventMapper.toEventFullDto(event);
+    }
+
+    @Override
+    public List<EventShortDto> findAllEventsPublic(String text, List<Integer> categories, Boolean paid,
+                                                   LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                                   Boolean onlyAvailable, String sort, HttpServletRequest request,
+                                                   PageRequest toPageRequest) {
+        if (rangeStart == null) {
+            rangeStart = LocalDateTime.now();
+        }
+        if (rangeEnd == null) {
+            rangeEnd = LocalDateTime.now().plusYears(100L);
+        }
+        if (rangeStart.isAfter(rangeEnd)) {
+            throw new ValidationException("Incorrect request: start of the event is after end of the event");
+        }
+        if (onlyAvailable != null && !onlyAvailable) {
+            onlyAvailable = null;
+        }
+        var events = repository.findAllPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
+                toPageRequest);
+        events.forEach(statsUtil::setEventViews);
+        if(sort != null) {
+            switch (sort) {
+                case "EVENT_DATE":
+                    events = events.stream()
+                            .sorted(Comparator.comparing(Event::getEventDate)).collect(Collectors.toList());
+                    break;
+                case "VIEWS":
+                    events = events.stream().sorted(Comparator.comparing(Event::getViews)).collect(Collectors.toList());
+                    break;
+            }
+        }
+        addView(request.getRequestURI(), request.getRemoteAddr());
+        return events.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
     }
 
     private void addView(String uri, String ip) {
