@@ -7,13 +7,18 @@ import ru.practicum.model.Location;
 import ru.practicum.model.StateAction;
 import ru.practicum.model.StateUserAction;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
 public class UpdateEventUserRequest {
+    @Size(min = 20, max = 2000)
     private String annotation;
     private Long category;
+    @Size(min = 20, max = 7000)
     private String description;
     private LocalDateTime eventDate;
     private Location location;
@@ -21,5 +26,6 @@ public class UpdateEventUserRequest {
     private Integer participantLimit;
     private Boolean requestModeration;
     private StateUserAction stateAction;
+    @Size(min = 3, max = 120)
     private String title;
 }
