@@ -9,7 +9,7 @@ import ru.practicum.model.User;
 @UtilityClass
 public class UserMapper {
 
-    public User UserRequestToUser(NewUserRequest userRequest) {
+    public User userRequestToUser(NewUserRequest userRequest) {
         return new User(
                 null,
                 userRequest.getName(),

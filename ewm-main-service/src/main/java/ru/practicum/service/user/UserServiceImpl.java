@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(NewUserRequest newUserRequest) {
-        return UserMapper.toUserDto(repository.save(UserMapper.UserRequestToUser(newUserRequest)));
+        return UserMapper.toUserDto(repository.save(UserMapper.userRequestToUser(newUserRequest)));
     }
 
     @Override
