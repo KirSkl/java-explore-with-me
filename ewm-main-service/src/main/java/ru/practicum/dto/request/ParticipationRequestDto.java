@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.model.RequestStatus;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor

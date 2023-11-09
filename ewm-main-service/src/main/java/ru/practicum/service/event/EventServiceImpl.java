@@ -208,7 +208,7 @@ public class EventServiceImpl implements EventService {
         var events = repository.findAllPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
                 toPageRequest);
         events.forEach(statsUtil::setEventViews);
-        if(sort != null) {
+        if (sort != null) {
             switch (sort) {
                 case "EVENT_DATE":
                     events = events.stream()

@@ -1,6 +1,5 @@
 package ru.practicum.repository;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +24,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page);
 
     List<Event> findAllByInitiatorId(Long initiatorId, Pageable page);
+
     Optional<Event> findByIdAndState(Long id, EventState state);
 
     @Query("SELECT e FROM Event e " +
@@ -37,7 +37,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND e.eventDate < ?5 " +
             "and (?6 is null or e.confirmedRequests < e.participantLimit or e.participantLimit = 0)")
     List<Event> findAllPublic(String text, Iterable<Integer> categories, Boolean paid, LocalDateTime rangeStart,
-                       LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable page);
+                              LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable page);
 
 }
 

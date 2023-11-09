@@ -2,10 +2,6 @@ package ru.practicum.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.dto.user.UserShortDto;
-import ru.practicum.model.Category;
-import ru.practicum.model.EventState;
 import ru.practicum.model.Location;
 
 import javax.validation.constraints.NotBlank;

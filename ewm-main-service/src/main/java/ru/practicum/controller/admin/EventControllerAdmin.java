@@ -29,9 +29,9 @@ public class EventControllerAdmin {
                                         @RequestParam(defaultValue = "") List<EventState> states,
                                         @RequestParam(defaultValue = "") List<Long> categories,
                                         @RequestParam(required = false)
-                                            @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeStart,
+                                        @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeStart,
                                         @RequestParam(required = false)
-                                            @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeEnd,
+                                        @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeEnd,
                                         @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM) int from,
                                         @Positive @RequestParam(defaultValue = Constants.DEFAULT_SIZE) int size) {
         log.info(String.format("Получен запрос GET /admin/events с параметрами users=%s, states=%s, categories=%s, " +

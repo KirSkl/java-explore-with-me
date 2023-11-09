@@ -2,13 +2,9 @@ package ru.practicum.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.model.EventState;
 import ru.practicum.model.Location;
 import ru.practicum.model.StateAction;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
