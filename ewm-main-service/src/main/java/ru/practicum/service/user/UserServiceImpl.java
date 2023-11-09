@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         if (!ids.isEmpty()) {
             return repository.getUsersByIdIn(ids).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
         }
-        return repository.getAll(page).stream().map(UserMapper::toUserDto)
+        return repository.getAllUser(page).stream().map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
