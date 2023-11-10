@@ -31,7 +31,7 @@ public class CompilationControllerAdmin {
         service.deleteCompilation(compId);
     }
 
-    @PatchMapping("{compId")
+    @PatchMapping("{compId}")
     public CompilationDto updateCompilation(@PathVariable Integer compId, @RequestBody NewCompilationDto compilationDto) {
         log.info(String.format("Получен запрос PATCH /admin/compilation/{compId} = %s", compId));
         return service.updateCompilation(compId, compilationDto);

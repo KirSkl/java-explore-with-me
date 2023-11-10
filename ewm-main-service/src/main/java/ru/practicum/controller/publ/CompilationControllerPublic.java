@@ -32,7 +32,7 @@ public class CompilationControllerPublic {
         return service.getCompilations(pinned, PaginationUtil.toPageRequest(from, size));
     }
 
-    @GetMapping("/{compId")
+    @GetMapping("/{compId}")
     public CompilationDto getCompilation(@PathVariable Integer compId) {
         log.info(String.format(
                 "Получен запрос GET /compilations/{compId} = %s на получение подборки событий", compId));
