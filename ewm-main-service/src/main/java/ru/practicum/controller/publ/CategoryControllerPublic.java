@@ -28,7 +28,7 @@ public class CategoryControllerPublic {
         return service.getCategories(PaginationUtil.toPageRequest(from, size));
     }
 
-    @GetMapping("/{catId")
+    @GetMapping("/{catId}")
     public CategoryDto getCategory(@PathVariable Long catId) {
         log.info(String.format("Получен запрос GET /categories/{catId} = %s на получение категории", catId));
         return service.getCategory(catId);
