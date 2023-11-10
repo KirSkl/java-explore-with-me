@@ -11,7 +11,6 @@ import ru.practicum.dto.user.UserDto;
 import ru.practicum.service.user.UserService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
@@ -30,10 +29,10 @@ public class UserControllerAdmin {
     }
 
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(required = false) List<Integer> ids,
-                                  @PositiveOrZero @RequestParam(required = false, defaultValue = Constants.DEFAULT_FROM)
+    public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
+                                  @RequestParam(required = false, defaultValue = Constants.DEFAULT_FROM)
                                   int from,
-                                  @Positive @RequestParam(required = false, defaultValue = Constants.DEFAULT_SIZE)
+                                  @RequestParam(required = false, defaultValue = Constants.DEFAULT_SIZE)
                                   int size) {
         log.info(String.format("Получен запрос GET /admin/users на получение списка пользователей с id = %s, " +
                 "начиная с %s, по %s на странице", ids, from, size));

@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsers(Pageable page, List<Integer> ids) {
+    public List<UserDto> getUsers(Pageable page, List<Long> ids) {
         if (!ids.isEmpty()) {
             return repository.getUsersByIdIn(ids).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
         }

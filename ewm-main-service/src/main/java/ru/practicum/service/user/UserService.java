@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserService {
     UserDto createUser(NewUserRequest newUserRequest);
 
-    List<UserDto> getUsers(Pageable page, List<Integer> ids);
+    List<UserDto> getUsers(Pageable page, List<Long> ids);
 
     void deleteUser(Long userId);
 }

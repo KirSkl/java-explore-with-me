@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.model.User;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    List<User> getUsersByIdIn(Iterable<Integer> ids);
+    List<User> getUsersByIdIn(Collection<Long> id);
 
     Page<User> findAll(Pageable page);
 
