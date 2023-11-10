@@ -28,10 +28,8 @@ public class EventControllerPrivate {
 
     @GetMapping
     public List<EventShortDto> getUsersEvents(@PathVariable Long userId,
-                                              @PositiveOrZero @RequestParam(required = false,
-                                                      defaultValue = Constants.DEFAULT_FROM) int from,
-                                              @Positive @RequestParam(required = false,
-                                                      defaultValue = Constants.DEFAULT_SIZE) int size) {
+                                              @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM) int from,
+                                              @Positive @RequestParam(defaultValue = Constants.DEFAULT_SIZE) int size) {
         log.info(String.format("Получен запрос GET /users/{userId}/events на получение списка событий, инициированных " +
                 "пользователем с id = %s, начиная с %s, по %s на странице", userId, from, size));
         return service.getUserEvents(userId, PaginationUtil.toPageRequest(from, size));

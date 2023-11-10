@@ -49,8 +49,8 @@ public class Event {
     private EventState state;
     @Column(name = "title")
     private String title;
-    @Formula(value = "SELECT COUNT(r.id) FROM requests r WHERE r.event_id = id AND r.status LIKE 'CONFIRMED'")
-    private int confirmedRequests;
+    @Formula(value = "SELECT COUNT(r.id) FROM requests as r WHERE r.event_id = id AND r.status LIKE 'CONFIRMED'")
+    private Integer confirmedRequests;
     @Transient
     private Long views;
 
