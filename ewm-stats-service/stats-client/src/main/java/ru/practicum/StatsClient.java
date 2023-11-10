@@ -1,4 +1,4 @@
-package client;
+package ru.practicum;
 
 import dto.EndpointHitDto;
 import dto.ViewStatsDto;

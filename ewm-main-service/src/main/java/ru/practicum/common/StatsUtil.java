@@ -1,6 +1,6 @@
 package ru.practicum.common;
 
-import client.StatsClient;
+import ru.practicum.StatsClient;
 import dto.ViewStatsDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package ru.practicum.service.event;
 
-import client.StatsClient;
+import ru.practicum.StatsClient;
 import dto.EndpointHitDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
