@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> getUsersByIdIn(Iterable<Integer> ids);
 
-    Page<User> findAllUser(Pageable page);
+    Page<User> findAll(Pageable page);
 
     @Transactional
     @Modifying
