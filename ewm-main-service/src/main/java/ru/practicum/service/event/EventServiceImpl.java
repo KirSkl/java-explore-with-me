@@ -106,6 +106,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest request) {
         checkUserIsExistsAndGet(userId);
+
         var oldEvent = checkEventIsExistsAndGet(eventId);
         /*if (!oldEvent.getState().equals(EventState.PUBLISHED)) {
             throw new DataConflictException("Event must not be published");
