@@ -18,7 +18,6 @@ public interface CompilationRepository extends JpaRepository<Compilation, Intege
     @Query(value = "DELETE from Compilation c where c.id = ?1")
     int deleteByIdAndReturnCount(Integer compId);
 
-    @Modifying
     @Query("SELECT c FROM Compilation c WHERE c.pinned = :pinned or :pinned is null")
     List<Compilation> findAllByPinned(Boolean pinned, Pageable page);
 }
