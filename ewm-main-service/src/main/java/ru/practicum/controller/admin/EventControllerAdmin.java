@@ -37,7 +37,7 @@ public class EventControllerAdmin {
         log.info(String.format("Получен запрос GET /admin/events с параметрами users=%s, states=%s, categories=%s, " +
                         "rangeStart=%s, rangeEnd=%s, from=%s, size=%s",
                 users, states, categories, rangeStart, rangeEnd, from, size));
-        if (!rangeStart.isBefore(rangeEnd)) {
+        if (rangeStart !=null && rangeEnd != null && !rangeStart.isBefore(rangeEnd)) {
             throw new InvalidDatesException("Неверные даты");
         }
         return service.getEvents(users, states, categories, rangeStart, rangeEnd,
