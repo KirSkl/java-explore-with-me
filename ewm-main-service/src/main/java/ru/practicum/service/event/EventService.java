@@ -32,7 +32,7 @@ public interface EventService {
 
     EventFullDto getEvent(Long id, HttpServletRequest request);
 
-    List<EventShortDto> findAllEventsPublic(String text, List<Integer> categories, Boolean paid,
+    List<EventShortDto> findAllEventsPublic(String text, List<Long> categories, Boolean paid,
                                             LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
                                             String sort, HttpServletRequest request, PageRequest toPageRequest);
 }

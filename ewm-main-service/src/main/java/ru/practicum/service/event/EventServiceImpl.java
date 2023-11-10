@@ -189,7 +189,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> findAllEventsPublic(String text, List<Integer> categories, Boolean paid,
+    public List<EventShortDto> findAllEventsPublic(String text, List<Long> categories, Boolean paid,
                                                    LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                                    Boolean onlyAvailable, String sort, HttpServletRequest request,
                                                    PageRequest toPageRequest) {

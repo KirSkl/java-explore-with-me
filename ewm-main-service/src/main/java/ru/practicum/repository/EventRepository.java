@@ -36,7 +36,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND e.eventDate > ?4 " +
             "AND e.eventDate < ?5 " +
             "and (?6 is null or e.confirmedRequests < e.participantLimit or e.participantLimit = 0)")
-    List<Event> findAllPublic(String text, Iterable<Integer> categories, Boolean paid, LocalDateTime rangeStart,
+    List<Event> findAllPublic(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                               LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable page);
 
 }
