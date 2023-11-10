@@ -15,11 +15,11 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e from Event e " +
-            "WHERE (?1 is null or e.initiator.id in ?1) " +
-            "AND (?2 is null or e.state in ?2) " +
-            "AND (?3 is null or e.category.id in ?3) " +
-            "AND e.eventDate > ?4 " +
-            "AND e.eventDate < ?5")
+            "WHERE (:users is null or e.initiator.id in :users) " +
+            "AND (:states is null or e.state in :states) " +
+            "AND (:categories is null or e.category.id in :categories) " +
+            "AND e.eventDate > :rangeStart " +
+            "AND e.eventDate < :rangeEnd")
     List<Event> getEventsAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page);
 

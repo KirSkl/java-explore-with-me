@@ -108,9 +108,9 @@ public class EventServiceImpl implements EventService {
         checkUserIsExistsAndGet(userId);
 
         var oldEvent = checkEventIsExistsAndGet(eventId);
-        /*if (!oldEvent.getState().equals(EventState.PUBLISHED)) {
+        if (!oldEvent.getState().equals(EventState.PUBLISHED)) {
             throw new DataConflictException("Event must not be published");
-        }*/
+        }
         if (request.getStateAction() != null) {
             switch (request.getStateAction()) {
                 case CANCEL_REVIEW:
