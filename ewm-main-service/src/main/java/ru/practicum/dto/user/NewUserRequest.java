@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Getter
 public class NewUserRequest {
     @NotBlank
