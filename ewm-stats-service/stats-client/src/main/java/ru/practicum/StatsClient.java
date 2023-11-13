@@ -18,6 +18,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -39,15 +40,15 @@ public class StatsClient {
     }
 
     public List<ViewStatsDto> findStats(LocalDateTime start, LocalDateTime end, Boolean unique, List<String> uris) {
-        String encodedStartTime = URLEncoder.encode(start.toString(), StandardCharsets.UTF_8);
-        String endStartTime = URLEncoder.encode(end.toString(), StandardCharsets.UTF_8);
+        String encodedStartTime = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String endStartTime = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
         Map<String, Object> parameters = Map.of(
                 "start", encodedStartTime,
                 "end", endStartTime,
                 "unique", unique,
                 "uris", uris
         );
-        return rest.exchange("/stats?start={start}&end={end}&unique={unique}", HttpMethod.GET,
+        return rest.exchange("/stats?start={start}&end={end}&unique={unique}&uris={uris}", HttpMethod.GET,
                 new HttpEntity<>(defaultHeaders()), new ParameterizedTypeReference<List<ViewStatsDto>>() {
                 }, parameters).getBody();
     }

@@ -17,7 +17,7 @@ public class EventFullDto {
     private Long id;
     private String annotation;
     private CategoryDto category;
-    private LocalDateTime created;
+    private LocalDateTime createdOn;
     private String description;
     private LocalDateTime eventDate;
     private UserShortDto initiator;

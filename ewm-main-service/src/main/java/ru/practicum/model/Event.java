@@ -26,7 +26,7 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
     @Column(name = "created")
-    private LocalDateTime created;
+    private LocalDateTime createdOn;
     @Column(name = "description")
     private String description;
     @Column(name = "event_date")

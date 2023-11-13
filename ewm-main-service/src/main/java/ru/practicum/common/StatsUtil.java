@@ -15,7 +15,7 @@ public class StatsUtil {
     private final StatsClient statsClient;
 
     public void setEventViews(Event event) {
-        List<ViewStatsDto> views = statsClient.findStats(event.getCreated(), LocalDateTime.now(), true,
+        List<ViewStatsDto> views = statsClient.findStats(event.getCreatedOn(), LocalDateTime.now(), true,
                 List.of("/events/" + event.getId()));
         if (views.size() == 0) {
             event.setViews(0L);

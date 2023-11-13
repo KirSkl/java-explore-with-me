@@ -17,7 +17,7 @@ public class EventMapper {
                 event.getId(),
                 event.getAnnotation(),
                 CategoryMapper.toCategoryDto(event.getCategory()),
-                event.getCreated(),
+                event.getCreatedOn(),
                 event.getDescription(),
                 event.getEventDate(),
                 UserMapper.toUserShortDto(event.getInitiator()),
