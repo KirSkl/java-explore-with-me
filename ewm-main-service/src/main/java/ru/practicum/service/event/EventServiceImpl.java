@@ -16,10 +16,7 @@ import ru.practicum.exceptions.*;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.model.*;
-import ru.practicum.repository.CategoryRepository;
-import ru.practicum.repository.EventRepository;
-import ru.practicum.repository.RequestRepository;
-import ru.practicum.repository.UserRepository;
+import ru.practicum.repository.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -37,6 +34,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
+    private final LocationRepository locationRepository;
     private final StatsUtil statsUtil;
     private final StatsClient statsClient;
 
@@ -91,8 +89,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto eventDto) {
         checkDates(eventDto.getEventDate());
-        return EventMapper.toEventFullDto(repository.save(EventMapper.toEvent(eventDto,
-                checkCategoryIsExistsAndGet(eventDto.getCategory()), checkUserIsExistsAndGet(userId))));
+        var event = EventMapper.toEvent(eventDto, checkCategoryIsExistsAndGet(eventDto.getCategory()),
+                checkUserIsExistsAndGet(userId));
+        event.setLocation(locationRepository.save(event.getLocation()));
+        return EventMapper.toEventFullDto(repository.save(event));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class EventServiceImpl implements EventService {
         checkUserIsExistsAndGet(userId);
 
         var oldEvent = checkEventIsExistsAndGet(eventId);
-        if (!oldEvent.getState().equals(EventState.PUBLISHED)) {
+        if (oldEvent.getState().equals(EventState.PUBLISHED)) {
             throw new DataConflictException("Event must not be published");
         }
         if (request.getStateAction() != null) {
@@ -275,7 +275,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private void checkDates(LocalDateTime start) {
-        if (start.isAfter(LocalDateTime.now().plusHours(2L))) {
+        if (!start.isAfter(LocalDateTime.now().plusHours(2L))) {
             throw new InvalidDatesException(String.format(
                     "Field: eventDate. Error: должно содержать дату, которая еще не наступила. Value: %s", start));
         }
