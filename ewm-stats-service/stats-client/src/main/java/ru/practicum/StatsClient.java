@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -41,7 +39,7 @@ public class StatsClient {
 
     public List<ViewStatsDto> findStats(LocalDateTime start, LocalDateTime end, Boolean unique, List<String> uris) {
         String encodedStartTime = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String endStartTime = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
+        String endStartTime = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         Map<String, Object> parameters = Map.of(
                 "start", encodedStartTime,
                 "end", endStartTime,
