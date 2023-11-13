@@ -228,6 +228,7 @@ public class EventServiceImpl implements EventService {
         statsClient.createHit(new EndpointHitDto(null, "ewm-main-service", uri, ip, LocalDateTime.now()));
     }
 ///проверить, сохраняется ли в базу просмотр события
+
     private User checkUserIsExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("Пользователь не найден"));
