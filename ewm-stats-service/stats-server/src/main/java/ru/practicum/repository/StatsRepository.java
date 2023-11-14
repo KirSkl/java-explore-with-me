@@ -40,12 +40,12 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "WHERE h.uri IN :uris AND h.timestamp BETWEEN :start AND :end " +
             "GROUP BY h.uri, h.app " +
             "ORDER BY COUNT(h.ip) DESC")
-    List<ViewStatsDto> getAllStatsByUri(Iterable uris, LocalDateTime start, LocalDateTime end);
+    List<ViewStatsDto> getAllStatsByUri(List<String> uris, LocalDateTime start, LocalDateTime end);
 
     @Query(value = "SELECT new dto.ViewStatsDto(h.app, h.uri, COUNT(DISTINCT h.ip)) " +
             "FROM EndpointHit AS h " +
-            "WHERE h.uri IN :uris AND h.timestamp BETWEEN :start AND :end " +
+            "WHERE h.uri IN :uris AND h.timestamp BETWEEN :start and :end " +
             "GROUP BY h.uri, h.app " +
             "ORDER BY COUNT(DISTINCT h.ip) DESC")
-    List<ViewStatsDto> getAllStatsByUriUnique(Iterable uris, LocalDateTime start, LocalDateTime end);
+    List<ViewStatsDto> getAllStatsByUriUnique(List<String> uris, LocalDateTime start, LocalDateTime end);
 }

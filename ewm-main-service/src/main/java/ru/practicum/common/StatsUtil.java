@@ -20,7 +20,7 @@ public class StatsUtil {
         if (views.size() == 0) {
             event.setViews(0L);
         } else {
-            event.setViews(views.get(0).getHits()); // проверить, так ли в другом файле, уточнить как считается
+            event.setViews(views.get(0).getHits());
         }
     }
 }

@@ -18,13 +18,11 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void createHit(EndpointHitDto endpointHitDto) {
-
         repository.save(HitMapper.toEndpointHit(endpointHitDto));
     }
 
     @Override
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, Boolean unique, List<String> urisList) {
-        List<EndpointHit> hits;
         if (urisList.isEmpty()) {
             if (unique) {
                 return repository.getAllStatsUnique(start, end);
