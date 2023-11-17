@@ -12,6 +12,7 @@ import ru.practicum.exceptions.InvalidDatesException;
 import ru.practicum.model.EventState;
 import ru.practicum.service.event.EventService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -45,7 +46,7 @@ public class EventControllerAdmin {
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto patchEvent(@PathVariable Long eventId, @RequestBody UpdateEventAdminRequest request) {
+    public EventFullDto patchEvent(@PathVariable Long eventId, @Valid @RequestBody UpdateEventAdminRequest request) {
         log.info(String.format("Получен запрос PATCH /admin/events/{eventId} = %s", eventId));
         return service.updateEvent(eventId, request);
     }

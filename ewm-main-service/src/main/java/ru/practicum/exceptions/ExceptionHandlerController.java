@@ -27,7 +27,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleInvalidDatesException(InvalidDatesException e) {
         return new ApiError("FORBIDDEN", "For the requested operation the conditions are not met.",
                 e.getMessage(), LocalDateTime.now());

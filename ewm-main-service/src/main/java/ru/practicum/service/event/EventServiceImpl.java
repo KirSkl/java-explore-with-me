@@ -244,10 +244,13 @@ public class EventServiceImpl implements EventService {
             oldEvent.setDescription(request.getDescription());
         }
         if (request.getEventDate() != null) {
+            if (request.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+                throw new InvalidDatesException("EventDate must be one hour in the future at least");
+            }
             oldEvent.setEventDate(request.getEventDate());
         }
         if (request.getLocation() != null) {
-            oldEvent.setLocation(request.getLocation());
+            oldEvent.setLocation(locationRepository.save(request.getLocation()));
         }
         if (request.getPaid() != null) {
             oldEvent.setPaid(request.getPaid());

@@ -52,7 +52,7 @@ public class EventControllerPrivate {
 
     @PatchMapping("/{eventId}")
     public EventFullDto updateMyEvent(@PathVariable Long userId, @PathVariable Long eventId,
-                                      @RequestBody UpdateEventUserRequest request) {
+                                      @Valid @RequestBody UpdateEventUserRequest request) {
         log.info(String.format("Получен запрос PATCH /users/{userId} = %s/events/{eventId} = %s " +
                 "на редактирование информации о событии", userId, eventId));
         return service.updateUserEvent(userId, eventId, request);
