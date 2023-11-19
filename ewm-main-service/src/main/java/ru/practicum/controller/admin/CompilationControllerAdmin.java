@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping(path = "/admin/compilation")
+@RequestMapping(path = "/admin/compilations")
 public class CompilationControllerAdmin {
     private final CompilationService service;
 

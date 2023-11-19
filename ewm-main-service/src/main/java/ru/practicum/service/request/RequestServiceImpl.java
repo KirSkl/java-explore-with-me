@@ -59,11 +59,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public ParticipationRequestDto cancelRequest(Long userId, Integer requestId) {
+    public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         checkUserIsExistsAndGet(userId);
-        var request = repository.findById(Long.valueOf(requestId)).orElseThrow(()
+        var request = repository.findById(requestId).orElseThrow(()
                 -> new NotFoundException("Запрос не найден"));
-        request.setStatus(RequestStatus.CANCELLED);
+        request.setStatus(RequestStatus.CANCELED);
         return RequestMapper.toParticipationRequestDto(repository.save(request));
     }
 

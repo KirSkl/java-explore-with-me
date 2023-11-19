@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS locations CASCADE;
 DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
-DROP TABLE IF EXISTS compilatios CASCADE;
-DROP TABLE IF EXISTS compilatios_events CASCADE;
+DROP TABLE IF EXISTS compilations CASCADE;
+DROP TABLE IF EXISTS compilations_events CASCADE;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS events
     title              VARCHAR(120)                            NOT NULL,
     CONSTRAINT pk_events PRIMARY KEY (id),
     CONSTRAINT fk_events_users FOREIGN KEY (initiator_id) REFERENCES users (id) ON DELETE CASCADE,
-    CONSTRAINT fk_events_categories FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE,
+    CONSTRAINT fk_events_categories FOREIGN KEY (category_id) REFERENCES categories (id),
     CONSTRAINT fk_events_locations FOREIGN KEY (location_id) REFERENCES locations (id) ON DELETE CASCADE
 );
 

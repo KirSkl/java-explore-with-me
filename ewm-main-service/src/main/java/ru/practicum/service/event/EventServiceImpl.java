@@ -1,12 +1,12 @@
 package ru.practicum.service.event;
 
-import ru.practicum.StatsClient;
 import dto.EndpointHitDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.StatsClient;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
@@ -56,7 +56,7 @@ public class EventServiceImpl implements EventService {
                     if (oldEvent.getState().equals(EventState.PUBLISHED)) {
                         throw new EditNotAllowException("Cannot reject the event because it's in the state: PUBLISHED");
                     }
-                    oldEvent.setState(EventState.CANCELLED);
+                    oldEvent.setState(EventState.CANCELED);
                     break;
                 case PUBLISH_EVENT:
                     if (!oldEvent.getState().equals(EventState.PENDING)) {
@@ -114,7 +114,7 @@ public class EventServiceImpl implements EventService {
         if (request.getStateAction() != null) {
             switch (request.getStateAction()) {
                 case CANCEL_REVIEW:
-                    oldEvent.setState(EventState.CANCELLED);
+                    oldEvent.setState(EventState.CANCELED);
                     break;
                 case SEND_TO_REVIEW:
                     oldEvent.setState(EventState.PENDING);
@@ -141,7 +141,7 @@ public class EventServiceImpl implements EventService {
                                                               EventRequestStatusUpdateRequest request) {
         var user = checkUserIsExistsAndGet(userId);
         var event = checkEventIsExistsAndGet(eventId);
-        List<Integer> ids = request.getRequestIds();
+        List<Long> ids = request.getRequestIds();
         List<ParticipationRequest> requests = requestRepository.findAllByIdIn(ids);
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
