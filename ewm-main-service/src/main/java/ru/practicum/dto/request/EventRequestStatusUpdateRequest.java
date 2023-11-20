@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class EventRequestStatusUpdateRequest {
-    private List<Integer> requestIds;
+    private List<Long> requestIds;
 
     private RequestStatus status;
 }

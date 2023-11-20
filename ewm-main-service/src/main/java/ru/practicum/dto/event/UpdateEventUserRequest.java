@@ -1,9 +1,11 @@
 package ru.practicum.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ru.practicum.common.Constants;
 import ru.practicum.model.Location;
 import ru.practicum.model.StateUserAction;
 
@@ -20,6 +22,7 @@ public class UpdateEventUserRequest {
     private Long category;
     @Size(min = 20, max = 7000)
     private String description;
+    @JsonFormat(pattern = Constants.TIME_PATTERN)
     private LocalDateTime eventDate;
     private Location location;
     private Boolean paid;

@@ -1,10 +1,12 @@
 package ru.practicum.service.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.user.NewUserRequest;
 import ru.practicum.dto.user.UserDto;
+import ru.practicum.exceptions.DataConflictException;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.UserMapper;
 import ru.practicum.repository.UserRepository;
@@ -19,7 +21,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(NewUserRequest newUserRequest) {
-        return UserMapper.toUserDto(repository.save(UserMapper.userRequestToUser(newUserRequest)));
+        try {
+            return UserMapper.toUserDto(repository.save(UserMapper.userRequestToUser(newUserRequest)));
+        } catch (
+                DataIntegrityViolationException e) {
+            throw new DataConflictException("This data duplicate data of other users");
+        }
     }
 
     @Override

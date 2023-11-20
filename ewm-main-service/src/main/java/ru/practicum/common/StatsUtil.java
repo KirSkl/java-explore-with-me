@@ -1,9 +1,9 @@
 package ru.practicum.common;
 
-import ru.practicum.StatsClient;
 import dto.ViewStatsDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.StatsClient;
 import ru.practicum.model.Event;
 
 import java.time.LocalDateTime;

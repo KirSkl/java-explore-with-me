@@ -18,7 +18,7 @@ public class RequestControllerPrivate {
 
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> findRequests(@PathVariable Long userId) {
-        log.info(String.format("Получен запрос GET /users/{userId} = %s /requests"));
+        log.info(String.format("Получен запрос GET /users/{userId} = %s /requests", userId));
         return service.getRequests(userId);
     }
 
@@ -32,7 +32,7 @@ public class RequestControllerPrivate {
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
-    public ParticipationRequestDto cancelRequest(@PathVariable Long userId, @PathVariable Integer requestId) {
+    public ParticipationRequestDto cancelRequest(@PathVariable Long userId, @PathVariable Long requestId) {
         log.info(String.format(
                 "Получен запрос PATCH /users/{userId}= %s/{requestId} = %s/cancel на отмену заявки участия в событии",
                 userId, requestId));
