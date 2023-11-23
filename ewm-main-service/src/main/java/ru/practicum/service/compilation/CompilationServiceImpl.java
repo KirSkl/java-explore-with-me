@@ -26,7 +26,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto addCompilation(NewCompilationDto compilationDto) {
         List<Event> events = new ArrayList<>();
-        if(compilationDto.getEvents()!=null) {
+        if (compilationDto.getEvents() != null) {
             events = eventRepository.findAllById(compilationDto.getEvents());
         }
         events.forEach(statsUtil::setEventViews);
