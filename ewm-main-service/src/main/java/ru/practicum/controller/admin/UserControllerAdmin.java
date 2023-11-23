@@ -29,7 +29,7 @@ public class UserControllerAdmin {
     }
 
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
+    public List<UserDto> getUsers(@RequestParam(defaultValue = "") List<Long> ids,
                                   @RequestParam(required = false, defaultValue = Constants.DEFAULT_FROM)
                                   int from,
                                   @RequestParam(required = false, defaultValue = Constants.DEFAULT_SIZE)
