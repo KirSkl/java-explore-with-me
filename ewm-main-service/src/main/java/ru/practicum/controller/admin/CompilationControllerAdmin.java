@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
+import ru.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.service.compilation.CompilationService;
 
 import javax.validation.Valid;
@@ -33,7 +34,7 @@ public class CompilationControllerAdmin {
 
     @PatchMapping("/{compId}")
     public CompilationDto updateCompilation(@PathVariable Integer compId,
-                                            @Valid @RequestBody NewCompilationDto compilationDto) {
+                                            @Valid @RequestBody UpdateCompilationRequest compilationDto) {
         log.info(String.format("Получен запрос PATCH /admin/compilation/{compId} = %s", compId));
         return service.updateCompilation(compId, compilationDto);
     }

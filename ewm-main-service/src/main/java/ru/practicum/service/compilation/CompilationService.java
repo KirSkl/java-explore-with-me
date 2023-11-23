@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
+import ru.practicum.dto.compilation.UpdateCompilationRequest;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface CompilationService {
 
     void deleteCompilation(Integer compId);
 
-    CompilationDto updateCompilation(Integer compId, NewCompilationDto compilationDto);
+    CompilationDto updateCompilation(Integer compId, UpdateCompilationRequest compilationDto);
 
     List<CompilationDto> getCompilations(Boolean pinned, PageRequest toPageRequest);
 

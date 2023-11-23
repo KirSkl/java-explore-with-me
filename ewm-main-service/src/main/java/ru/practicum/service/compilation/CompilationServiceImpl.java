@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
+import ru.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.model.Event;
@@ -42,7 +43,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto updateCompilation(Integer compId, NewCompilationDto compilationDto) {
+    public CompilationDto updateCompilation(Integer compId, UpdateCompilationRequest compilationDto) {
         var oldComp = repository.findById(compId).orElseThrow(()
                 -> new NotFoundException("Подборка не найдена"));
         if (compilationDto.getEvents() != null) {
