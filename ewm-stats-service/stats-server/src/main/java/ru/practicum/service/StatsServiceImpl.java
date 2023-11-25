@@ -9,6 +9,7 @@ import ru.practicum.mapper.HitMapper;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,16 +25,17 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, Boolean unique, List<String> urisList) {
-        if (urisList.isEmpty()) {
+    public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, Boolean unique, String[] urisList) {
+        if (urisList.length == 0) {
             if (unique) {
                 return repository.getAllStatsUnique(start, end);
             } else {
                 return repository.getAllStats(start, end);
             }
         } else {
+            var uris = String.join(",", urisList);
             if (unique) {
-                log.info(String.format("В базе данных будет выполнен поиск по uri = %s", urisList.get(0)));
+                log.info(String.format("В базе данных будет выполнен поиск по uri = %s", urisList[0]));
                 return repository.getAllStatsByUriUnique(urisList, start, end);
             } else {
                 return repository.getAllStatsByUri(urisList, start, end);
