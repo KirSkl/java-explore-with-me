@@ -68,7 +68,7 @@ public class EventControllerPrivate {
 
     @PatchMapping("/{eventId}/requests")
     public EventRequestStatusUpdateResult changeRequestStatus(@PathVariable Long userId, @PathVariable Long eventId,
-                                                              @Valid @RequestBody
+                                                              @RequestBody
                                                               EventRequestStatusUpdateRequest request) {
         log.info(String.format("Получен запрос PATCH /users/{userId} = %s/events/{eventId} = %s /requests " +
                 "на изменение статуса заявки", userId, eventId));
