@@ -5,7 +5,6 @@ import dto.ViewStatsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.exception.InvalidDatesException;
 import ru.practicum.mapper.HitMapper;
 import ru.practicum.repository.StatsRepository;
 
