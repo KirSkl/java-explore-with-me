@@ -26,10 +26,6 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, Boolean unique, String[] urisList) {
-        if (start.isAfter(end)) {
-            throw new InvalidDatesException(
-                    String.format("Date of start must not be after date of end: start = %s, end = %s", start, end));
-        }
         if (urisList.length == 0) {
             if (unique) {
                 return repository.getAllStatsUnique(start, end);

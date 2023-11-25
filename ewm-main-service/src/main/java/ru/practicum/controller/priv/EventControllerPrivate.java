@@ -29,10 +29,11 @@ public class EventControllerPrivate {
 
     @GetMapping
     public List<EventShortDto> getUsersEvents(@PathVariable Long userId,
-                                              @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM) int from,
+                                              @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM)
+                                              int from,
                                               @Positive @RequestParam(defaultValue = Constants.DEFAULT_SIZE) int size) {
-        log.info(String.format("Получен запрос GET /users/{userId}/events на получение списка событий, инициированных " +
-                "пользователем с id = %s, начиная с %s, по %s на странице", userId, from, size));
+        log.info(String.format("Получен запрос GET /users/{userId}/events на получение списка событий, " +
+                "инициированных пользователем с id = %s, начиная с %s, по %s на странице", userId, from, size));
         return service.getUserEvents(userId, PaginationUtil.toPageRequest(from, size));
     }
 
@@ -67,7 +68,8 @@ public class EventControllerPrivate {
 
     @PatchMapping("/{eventId}/requests")
     public EventRequestStatusUpdateResult changeRequestStatus(@PathVariable Long userId, @PathVariable Long eventId,
-                                                              @RequestBody EventRequestStatusUpdateRequest request) {
+                                                              @Valid @RequestBody
+                                                              EventRequestStatusUpdateRequest request) {
         log.info(String.format("Получен запрос PATCH /users/{userId} = %s/events/{eventId} = %s /requests " +
                 "на изменение статуса заявки", userId, eventId));
         return service.updateRequestStatus(userId, eventId, request);

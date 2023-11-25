@@ -17,9 +17,6 @@ public class StatsUtil {
     private final StatsClient statsClient;
 
     public void setEventViews(Event event) {
-        var uri = "/events/" + event.getId();
-        log.info(String.format("ищем просмотры по uri = %s", uri));
-        log.info(String.format("Точнее по uri = %s", List.of(uri)));
         List<ViewStatsDto> views = statsClient.findStats(event.getCreatedOn(), LocalDateTime.now(), true,
                 List.of("/events/" + event.getId()));
         if (views.size() == 0) {
