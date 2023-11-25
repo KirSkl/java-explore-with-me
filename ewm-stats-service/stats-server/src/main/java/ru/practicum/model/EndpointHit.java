@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Table(name = "hits")
 public class EndpointHit {
     @Id
