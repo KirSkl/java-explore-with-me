@@ -1,5 +1,6 @@
 package ru.practicum.common;
 
+import dto.EndpointHitDto;
 import dto.ViewStatsDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,10 @@ public class StatsUtil {
         } else {
             event.setViews(views.get(0).getHits());
         }
+    }
+
+    public void addView(String uri, String ip) {
+        statsClient.createHit(new EndpointHitDto(null, "ewm-main-service", uri, ip, LocalDateTime.now()));
     }
 }
 

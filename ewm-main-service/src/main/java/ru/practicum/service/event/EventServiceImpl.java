@@ -1,12 +1,10 @@
 package ru.practicum.service.event;
 
-import dto.EndpointHitDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.StatsClient;
 import ru.practicum.common.StatsUtil;
 import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
@@ -39,7 +37,6 @@ public class EventServiceImpl implements EventService {
     private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
     private final StatsUtil statsUtil;
-    private final StatsClient statsClient;
 
     @Override
     public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
@@ -163,8 +160,8 @@ public class EventServiceImpl implements EventService {
             checkRequestStatus(req);
             if (request.getStatus().equals(RequestStatus.CONFIRMED)) {
                 if (event.getConfirmedRequests() >= event.getParticipantLimit()) {
-                    throw new DataConflictException(String.format("The event has already reached its participant limit=%s",
-                            event.getParticipantLimit()));
+                    throw new DataConflictException(String.format(
+                            "The event has already reached its participant limit=%s", event.getParticipantLimit()));
                 }
                 req.setStatus(RequestStatus.CONFIRMED);
                 confirmedRequests.add(RequestMapper.toParticipationRequestDto(requestRepository.save(req)));
@@ -187,7 +184,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
         var event = repository.findByIdAndState(id, EventState.PUBLISHED).orElseThrow(()
                 -> new NotFoundException(String.format("Event with id=%s was not found", id)));
-        addView(request.getRequestURI(), request.getRemoteAddr());
+        statsUtil.addView(request.getRequestURI(), request.getRemoteAddr());
         statsUtil.setEventViews(event);
         return EventMapper.toEventFullDto(event);
     }
@@ -223,17 +220,13 @@ public class EventServiceImpl implements EventService {
                     break;
             }
         }
-        addView(request.getRequestURI(), request.getRemoteAddr());
+        statsUtil.addView(request.getRequestURI(), request.getRemoteAddr());
         return events.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
-    }
-
-    private void addView(String uri, String ip) {
-        statsClient.createHit(new EndpointHitDto(null, "ewm-main-service", uri, ip, LocalDateTime.now()));
     }
 
     private User checkUserIsExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь не найден"));
+                -> new NotFoundException(String.format("User with id = %s was not found", userId)));
     }
 
     private Event update(Event oldEvent, UpdateEventRequest request) {
@@ -272,12 +265,12 @@ public class EventServiceImpl implements EventService {
 
     private Event checkEventIsExistsAndGet(Long eventId) {
         return repository.findById(eventId).orElseThrow(()
-                -> new NotFoundException("Событие не найдено"));
+                -> new NotFoundException(String.format("Event with id = %s was not found", eventId)));
     }
 
     private Category checkCategoryIsExistsAndGet(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(()
-                -> new NotFoundException("Соответствующая категория не найдена"));
+                -> new NotFoundException(String.format("Category with id = %s was not found", categoryId)));
     }
 
     private void checkDates(LocalDateTime start) {
