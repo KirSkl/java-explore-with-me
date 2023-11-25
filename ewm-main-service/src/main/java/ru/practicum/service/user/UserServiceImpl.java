@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         if (repository.deleteByIdAndReturnCount(userId) != 1) {
-            throw new NotFoundException("Пользователь не найден");
+            throw new NotFoundException(String.format("User with id = %s was not found", userId));
         }
     }
 }

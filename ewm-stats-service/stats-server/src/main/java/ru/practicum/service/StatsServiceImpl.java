@@ -19,7 +19,6 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void createHit(EndpointHitDto endpointHitDto) {
-        log.info(String.format("В базу данных будет добавлен статхит c uri = %s", endpointHitDto.getUri()));
         repository.save(HitMapper.toEndpointHit(endpointHitDto));
     }
 
@@ -32,9 +31,7 @@ public class StatsServiceImpl implements StatsService {
                 return repository.getAllStats(start, end);
             }
         } else {
-            var uris = String.join(",", urisList);
             if (unique) {
-                log.info(String.format("В базе данных будет выполнен поиск по uri = %s", urisList[0]));
                 return repository.getAllStatsByUriUnique(urisList, start, end);
             } else {
                 return repository.getAllStatsByUri(urisList, start, end);

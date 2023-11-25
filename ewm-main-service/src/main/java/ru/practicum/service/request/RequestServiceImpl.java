@@ -36,7 +36,7 @@ public class RequestServiceImpl implements RequestService {
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
         var requester = checkUserIsExistsAndGet(userId);
         var event = eventRepository.findById(eventId).orElseThrow(()
-                -> new NotFoundException("Событие не найдено"));
+                -> new NotFoundException(String.format("Event with id = %s was not found", eventId)));
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new DataConflictException("The event is not in the right status: PUBLISHED");
         }
@@ -62,13 +62,13 @@ public class RequestServiceImpl implements RequestService {
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         checkUserIsExistsAndGet(userId);
         var request = repository.findById(requestId).orElseThrow(()
-                -> new NotFoundException("Запрос не найден"));
+                -> new NotFoundException(String.format("Request with id = %s was not found", requestId)));
         request.setStatus(RequestStatus.CANCELED);
         return RequestMapper.toParticipationRequestDto(repository.save(request));
     }
 
     private User checkUserIsExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь не найден"));
+                -> new NotFoundException(String.format("User with id = %s was not found", userId)));
     }
 }
