@@ -5,6 +5,7 @@ import dto.ViewStatsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.exception.InvalidDatesException;
 import ru.practicum.mapper.HitMapper;
 import ru.practicum.repository.StatsRepository;
 
@@ -25,6 +26,10 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, Boolean unique, String[] urisList) {
+        if (start.isAfter(end)) {
+            throw new InvalidDatesException(
+                    String.format("Date of start must not be after date of end: start = %s, end = %s", start, end));
+        }
         if (urisList.length == 0) {
             if (unique) {
                 return repository.getAllStatsUnique(start, end);
