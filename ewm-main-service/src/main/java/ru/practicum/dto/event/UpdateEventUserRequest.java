@@ -3,7 +3,6 @@ package ru.practicum.dto.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.practicum.common.Constants;
 import ru.practicum.model.Location;
@@ -13,7 +12,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Getter
 @NoArgsConstructor
 @Data
 public class UpdateEventUserRequest {
