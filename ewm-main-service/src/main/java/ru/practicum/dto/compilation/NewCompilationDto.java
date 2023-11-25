@@ -1,14 +1,16 @@
 package ru.practicum.dto.compilation;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
+@Data
+@NoArgsConstructor
 public class NewCompilationDto {
     private List<Long> events;
     private Boolean pinned;
