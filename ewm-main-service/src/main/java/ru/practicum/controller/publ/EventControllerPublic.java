@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.common.Constants;
 import ru.practicum.common.PaginationUtil;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
@@ -33,14 +34,15 @@ public class EventControllerPublic {
                                              @RequestParam(required = false) List<Long> categories,
                                              @RequestParam(required = false) Boolean paid,
                                              @RequestParam(required = false)
-                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                             @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeStart,
                                              @RequestParam(required = false)
-                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+                                             @DateTimeFormat(pattern = Constants.TIME_PATTERN) LocalDateTime rangeEnd,
                                              @RequestParam(required = false) Boolean onlyAvailable,
                                              @RequestParam(required = false) String sort,
-                                             @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                             @Positive @RequestParam(defaultValue = "10") Integer size,
-                                             HttpServletRequest request) {
+                                             @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM)
+                                             Integer from,
+                                             @Positive @RequestParam(defaultValue = Constants.DEFAULT_SIZE)
+                                             Integer size, HttpServletRequest request) {
         log.info(String.format("Получен GET /events запрос на получение списка событий с параметрами: text = %s, " +
                         "categories = %s, paid = %s, rangeStart = %s, rangeEnd = %s, onlyAvailable = %s, sort = %s, " +
                         "from = %s, size = %s", text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
