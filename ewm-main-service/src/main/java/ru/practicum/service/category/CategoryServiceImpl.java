@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategory(Long catId, NewCategoryDto newCategoryDto) {
         Category category = repository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("категории с id=" + catId + " не существует"));
+                .orElseThrow(() -> new NotFoundException(String.format("Category with id= %s was not found", catId)));
         if (category.getName().equals(newCategoryDto.getName())) {
             return CategoryMapper.toCategoryDto(category);
         }

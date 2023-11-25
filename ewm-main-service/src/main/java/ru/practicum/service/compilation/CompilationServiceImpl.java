@@ -38,14 +38,14 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public void deleteCompilation(Integer compId) {
         if (repository.deleteByIdAndReturnCount(compId) == 0) {
-            throw new NotFoundException("Подборка не найдена");
+            throw new NotFoundException(String.format("Compilation with id = %s was not found", compId));
         }
     }
 
     @Override
     public CompilationDto updateCompilation(Integer compId, UpdateCompilationRequest compilationDto) {
         var oldComp = repository.findById(compId).orElseThrow(()
-                -> new NotFoundException("Подборка не найдена"));
+                -> new NotFoundException(String.format("Compilation with id = %s was not found", compId)));
         if (compilationDto.getEvents() != null) {
             var events = eventRepository.findAllById(compilationDto.getEvents());
             events.forEach(statsUtil::setEventViews);
@@ -69,6 +69,6 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto getCompilation(Integer compId) {
         return CompilationMapper.toCompilationDto(repository.findById(compId).orElseThrow(()
-                -> new NotFoundException("Подборка не найдена")));
+                -> new NotFoundException(String.format("Compilation with id = %s was not found", compId))));
     }
 }
