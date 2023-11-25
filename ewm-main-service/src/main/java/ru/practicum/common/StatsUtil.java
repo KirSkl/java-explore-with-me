@@ -8,7 +8,6 @@ import ru.practicum.StatsClient;
 import ru.practicum.model.Event;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
