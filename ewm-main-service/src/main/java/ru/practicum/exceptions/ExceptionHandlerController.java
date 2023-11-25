@@ -40,13 +40,6 @@ public class ExceptionHandlerController {
                 e.getMessage(), LocalDateTime.now());
     }
 
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleValidationException(ValidationException e) {
-        return new ApiError("BAD_REQUEST", "Incorrectly made request", e.getMessage(), LocalDateTime.now());
-    }
-
     @Getter
     static class ApiError {
         private final String status;

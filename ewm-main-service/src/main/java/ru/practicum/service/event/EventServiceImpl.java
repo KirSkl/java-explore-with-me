@@ -12,7 +12,10 @@ import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.exceptions.*;
+import ru.practicum.exceptions.DataConflictException;
+import ru.practicum.exceptions.EditNotAllowException;
+import ru.practicum.exceptions.InvalidDatesException;
+import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.model.*;
@@ -201,7 +204,7 @@ public class EventServiceImpl implements EventService {
             rangeEnd = LocalDateTime.now().plusYears(100L);
         }
         if (rangeStart.isAfter(rangeEnd)) {
-            throw new ValidationException("Incorrect request: start of the event is after end of the event");
+            throw new InvalidDatesException("Incorrect request: start of the event is after end of the event");
         }
         if (onlyAvailable != null && !onlyAvailable) {
             onlyAvailable = null;
