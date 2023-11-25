@@ -44,7 +44,7 @@ public class StatsClient {
                 "start", encodedStartTime,
                 "end", endStartTime,
                 "unique", unique,
-                "uris", uris
+                "uris", uris.toArray()
         );
         return rest.exchange("/stats?start={start}&end={end}&unique={unique}&uris={uris}", HttpMethod.GET,
                 new HttpEntity<>(defaultHeaders()), new ParameterizedTypeReference<List<ViewStatsDto>>() {
