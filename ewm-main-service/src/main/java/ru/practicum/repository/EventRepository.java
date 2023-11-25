@@ -14,12 +14,12 @@ import java.util.Optional;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    @Query("SELECT e from Event e " +
-            "WHERE (:users is null or e.initiator.id in :users) " +
-            "AND (:states is null or e.state in :states) " +
-            "AND (:categories is null or e.category.id in :categories) " +
-            "AND (coalesce(:rangeStart, null) is null or e.eventDate > :rangeStart) " +
-            "AND (coalesce(:rangeEnd, null) is null or e.eventDate < :rangeEnd)")
+    @Query("SELECT e FROM Event e " +
+            "WHERE (:users IS NULL OR e.initiator.id IN :users) " +
+            "AND (:states IS NULL OR e.state IN :states) " +
+            "AND (:categories IS NULL OR e.category.id IN :categories) " +
+            "AND (COALESCE(:rangeStart, null) IS NULL OR e.eventDate > :rangeStart) " +
+            "AND (COALESCE(:rangeEnd, null) IS NULL OR e.eventDate < :rangeEnd)")
     List<Event> getEventsAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page);
 
@@ -27,15 +27,15 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Optional<Event> findByIdAndState(Long id, EventState state);
 
-    @Query("select e from Event e " +
-            "where e.state = 'PUBLISHED' " +
-            "and (:text is null or upper(e.annotation) like upper(concat('%', :text, '%')) or upper(e.description) " +
-            "like upper(concat('%', :text, '%')))" +
-            "and (:categories is null or e.category.id in :categories) " +
-            "and (:paid is null or e.paid = :paid) " +
-            "and e.eventDate > :rangeStart " +
-            "and e.eventDate < :rangeEnd " +
-            "and (:onlyAvailable is null or e.confirmedRequests < e.participantLimit or e.participantLimit = 0)")
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = 'PUBLISHED' " +
+            "AND (:text IS NULL OR UPPER(e.annotation) LIKE UPPER(CONCAT('%', :text, '%')) OR UPPER(e.description) " +
+            "LIKE UPPER(CONCAT('%', :text, '%')))" +
+            "AND (:categories IS NULL OR e.category.id IN :categories) " +
+            "AND (:paid IS NULL OR e.paid = :paid) " +
+            "AND e.eventDate > :rangeStart " +
+            "AND e.eventDate < :rangeEnd " +
+            "AND (:onlyAvailable IS NULL OR e.confirmedRequests < e.participantLimit OR e.participantLimit = 0)")
     List<Event> findAllPublic(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                               LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable page);
 

@@ -8,11 +8,11 @@ import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "users")
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +34,5 @@ public class User {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
-
-    public static class UserService {
     }
 }
