@@ -9,7 +9,6 @@ import ru.practicum.mapper.HitMapper;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
