@@ -29,12 +29,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (:text IS NULL) OR (e.annotation ILIKE CONCAT('%', :text, '%')) OR (e.description" +
-            "ILIKE CONCAT('%', :text, '%'))" +
+            "AND (:text IS NULL OR UPPER(e.annotation) LIKE UPPER(CONCAT('%', :text, '%')) OR UPPER(e.description) " +
+            "LIKE UPPER(CONCAT('%', :text, '%')))" +
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
-            "AND e.eventDate > :rangeStart " +
-            "AND e.eventDate < :rangeEnd " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
             "AND (:onlyAvailable IS NULL OR e.confirmedRequests < e.participantLimit OR e.participantLimit = 0)")
     List<Event> findAllPublic(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                               LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable page);
