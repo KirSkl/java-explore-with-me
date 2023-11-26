@@ -15,11 +15,7 @@ public class CompilationMapper {
     public Compilation toCompilation(NewCompilationDto compilationDto, List<Event> events) {
         var comp = new Compilation();
         comp.setEvents(events);
-        if (compilationDto.getPinned() == null) {
-            comp.setPinned(false);
-        } else {
-            comp.setPinned(compilationDto.getPinned());
-        }
+        comp.setPinned(compilationDto.getPinned() != null && compilationDto.getPinned());
         comp.setTitle(compilationDto.getTitle());
         return comp;
     }
