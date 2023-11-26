@@ -22,10 +22,10 @@ public class CompilationControllerPublic {
 
     @GetMapping
     public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                                @PositiveOrZero @RequestParam(required = false,
-                                                        defaultValue = Constants.DEFAULT_FROM) int from,
-                                                @Positive @RequestParam(required = false,
-                                                        defaultValue = Constants.DEFAULT_SIZE) int size) {
+                                                @PositiveOrZero @RequestParam(defaultValue = Constants.DEFAULT_FROM)
+                                                int from,
+                                                @Positive @RequestParam(defaultValue = Constants.DEFAULT_SIZE)
+                                                int size) {
         log.info(String.format(
                 "Получен запрос GET /compilations на получение списка подборок (pinned = %s, from = %s, size = %s)",
                 pinned, from, size));
