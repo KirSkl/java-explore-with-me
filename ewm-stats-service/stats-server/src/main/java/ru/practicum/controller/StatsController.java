@@ -1,5 +1,6 @@
 package ru.practicum.controller;
 
+import common.Constants;
 import dto.EndpointHitDto;
 import dto.ViewStatsDto;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import java.util.List;
 @Slf4j
 public class StatsController {
     private final StatsService statsService;
-    private final String timePattern = "yyyy-MM-dd HH:mm:ss";
 
     @Autowired
     public StatsController(StatsService statsService) {
@@ -33,10 +33,12 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStatsDto> getStats(@RequestParam @DateTimeFormat(pattern = timePattern) LocalDateTime start,
-                                       @RequestParam @DateTimeFormat(pattern = timePattern) LocalDateTime end,
+    public List<ViewStatsDto> getStats(@RequestParam @DateTimeFormat(pattern = Constants.TIME_PATTERN)
+                                       LocalDateTime start,
+                                       @RequestParam @DateTimeFormat(pattern = Constants.TIME_PATTERN)
+                                       LocalDateTime end,
                                        @RequestParam(defaultValue = "false") Boolean unique,
-                                       @RequestParam(required = false, defaultValue = "") String[] uris) {
+                                       @RequestParam(defaultValue = "") String[] uris) {
         log.info(String.format("Получен запрос GET /stats с параметрами: start = %s, end = %s, unique = %s, uris = %s",
                 start, end, unique, Arrays.toString(uris)));
         if (start.isAfter(end)) {

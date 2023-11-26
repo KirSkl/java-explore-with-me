@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import common.Constants;
 import dto.EndpointHitDto;
 import dto.ViewStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class StatsClient {
     }
 
     public List<ViewStatsDto> findStats(LocalDateTime start, LocalDateTime end, Boolean unique, List<String> uris) {
-        String encodedStartTime = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String endStartTime = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String encodedStartTime = start.format(Constants.TIME_FORMATTER);
+        String endStartTime = end.format(Constants.TIME_FORMATTER);
         Map<String, Object> parameters = Map.of(
                 "start", encodedStartTime,
                 "end", endStartTime,
