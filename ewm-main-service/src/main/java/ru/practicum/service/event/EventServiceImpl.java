@@ -41,6 +41,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
                                         LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page) {
+        if (categories.isEmpty()) {
+            categories = null;
+        }
         var events = repository.getEventsAdmin(users, states, categories, rangeStart, rangeEnd,
                 page);
         events.forEach(statsUtil::setEventViews);
@@ -205,6 +208,9 @@ public class EventServiceImpl implements EventService {
         }
         if (onlyAvailable != null && !onlyAvailable) {
             onlyAvailable = null;
+        }
+        if (categories.isEmpty()) {
+            categories = null;
         }
         var events = repository.findAllPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
                 toPageRequest);
