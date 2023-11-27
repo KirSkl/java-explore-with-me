@@ -41,7 +41,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
                                         LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page) {
-        if (categories.isEmpty()) {
+        if (categories != null && categories.isEmpty()) {
             categories = null;
         }
         var events = repository.getEventsAdmin(users, states, categories, rangeStart, rangeEnd,
