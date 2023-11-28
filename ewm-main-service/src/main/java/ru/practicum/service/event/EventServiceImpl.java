@@ -41,9 +41,15 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
                                         LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable page) {
-        /*if (categories != null && categories.isEmpty()) {
+        if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+            throw new InvalidDatesException("Incorrect request: start of the event is after end of the event");
+        }
+        if (categories != null && categories.isEmpty()) {
             categories = null;
-        }*/
+        }
+        if (states != null && states.isEmpty()) {
+            states = null;
+        }
         var events = repository.getEventsAdmin(users, states, categories, rangeStart, rangeEnd,
                 page);
         events.forEach(statsUtil::setEventViews);
@@ -209,7 +215,7 @@ public class EventServiceImpl implements EventService {
         if (onlyAvailable != null && !onlyAvailable) {
             onlyAvailable = null;
         }
-        if (categories.isEmpty()) {
+        if (categories != null && categories.isEmpty()) {
             categories = null;
         }
         var events = repository.findAllPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
