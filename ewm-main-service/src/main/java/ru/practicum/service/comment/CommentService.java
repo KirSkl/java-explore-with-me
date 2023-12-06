@@ -1,6 +1,5 @@
 package ru.practicum.service.comment;
 
-import org.springframework.data.domain.PageRequest;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
 import ru.practicum.dto.comment.UpdateCommentDto;
@@ -18,5 +17,5 @@ public interface CommentService {
 
     void deleteCommentAdmin(Long commentId);
 
-    List<CommentDto> getAllComments(Long userId, PageRequest pageRequest);
+    List<CommentDto> getAllComments(Long userId);
 }

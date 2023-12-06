@@ -17,4 +17,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     int deleteByIdAndReturnCount(Long commentId);
 
     List<Comment> findAllByAuthorId(Long authorId, Pageable page);
+
+    List<Comment> findAllByEventId(Long eventId);
 }

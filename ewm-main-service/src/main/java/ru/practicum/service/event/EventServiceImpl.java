@@ -36,6 +36,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
+    private final CommentRepository commentRepository;
     private final StatsUtil statsUtil;
 
     @Override
@@ -105,11 +106,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto showMyEvent(Long userId, Long eventId) {
-        var user = checkUserIsExistsAndGet(userId);
+    public EventFullWithCommentsDto showMyEvent(Long userId, Long eventId) {
+        checkUserIsExistsAndGet(userId);
         var event = checkEventIsExistsAndGet(eventId);
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new NotAllowException("Information is available for initiator only");
+        }
         statsUtil.setEventViews(event);
-        return EventMapper.toEventFullDto(event);
+        var comments = commentRepository.findAllByEventId(eventId);
+        return EventMapper.toEventFullWithCommentsDto(event, comments);
     }
 
     @Override
