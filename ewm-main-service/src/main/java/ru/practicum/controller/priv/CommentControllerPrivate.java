@@ -3,12 +3,17 @@ package ru.practicum.controller.priv;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.common.Constants;
+import ru.practicum.common.PaginationUtil;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
 import ru.practicum.dto.comment.UpdateCommentDto;
 import ru.practicum.service.comment.CommentService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -41,5 +46,14 @@ public class CommentControllerPrivate {
                 "Получен запрос DELETE /users/{userId} = %s/comments/{commentId} = %s на удаление комментария",
                 userId, commentId));
         service.deleteMyComment(userId, commentId);
+    }
+
+    @GetMapping
+    public List<CommentDto> getAllUserComments(@PathVariable Long userId,
+                                               @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero int from,
+                                               @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive int size) {
+        log.info(String.format(
+                "Получен запрос GET /users/{userId} = %s/comments на просмотр своих комментариев", userId));
+        return service.getAllComments(userId, PaginationUtil.toPageRequest(from, size));
     }
 }

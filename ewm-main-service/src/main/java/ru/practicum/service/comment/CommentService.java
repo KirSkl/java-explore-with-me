@@ -1,8 +1,11 @@
 package ru.practicum.service.comment;
 
+import org.springframework.data.domain.PageRequest;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
 import ru.practicum.dto.comment.UpdateCommentDto;
+
+import java.util.List;
 
 public interface CommentService {
     CommentDto postComment(Long userId, Long eventId, NewCommentDto commentDto);
@@ -14,4 +17,6 @@ public interface CommentService {
     void deleteMyComment(Long userId, Long commentId);
 
     void deleteCommentAdmin(Long commentId);
+
+    List<CommentDto> getAllComments(Long userId, PageRequest pageRequest);
 }

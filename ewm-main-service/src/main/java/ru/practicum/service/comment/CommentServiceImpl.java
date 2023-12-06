@@ -1,6 +1,7 @@
 package ru.practicum.service.comment;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
@@ -16,6 +17,8 @@ import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -65,6 +68,13 @@ public class CommentServiceImpl implements CommentService {
         if (repository.deleteByIdAndReturnCount(commentId) != 1) {
             throw new NotFoundException(String.format("Comment with id = %s was not found", commentId));
         }
+    }
+
+    @Override
+    public List<CommentDto> getAllComments(Long userId, PageRequest pageRequest) {
+        checkUserExistsAndGet(userId);
+        return repository.findAllByAuthorId(userId, pageRequest).stream()
+                .map(CommentMapper::toCommentDto).collect(Collectors.toList());
     }
 
     private User checkUserExistsAndGet(Long userId) {
