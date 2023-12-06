@@ -35,11 +35,11 @@ public class CommentControllerPrivate {
         return service.updateComment(userId, commentId, commentDto);
     }
 
-    @GetMapping(path = "{commentId}")
-    public CommentDto getMyComment(@PathVariable Long userId, @PathVariable Long commentId) {
+    @DeleteMapping(path = "{commentId}")
+    public void deleteComment(@PathVariable Long userId, @PathVariable Long commentId) {
         log.info(String.format(
-                "Получен запрос PATCH /users/{userId} = %s/comments/{commentId} = %s на просмотр своего комментария",
+                "Получен запрос DELETE /users/{userId} = %s/comments/{commentId} = %s на удаление комментария",
                 userId, commentId));
-        return service.getComment(userId);
+        service.deleteMyComment(userId, commentId);
     }
 }

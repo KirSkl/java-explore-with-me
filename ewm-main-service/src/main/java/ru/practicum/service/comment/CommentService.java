@@ -10,4 +10,8 @@ public interface CommentService {
     CommentDto updateComment(Long userId, Long commentId, UpdateCommentDto commentDto);
 
     CommentDto getComment(Long commentId);
+
+    void deleteMyComment(Long userId, Long commentId);
+
+    void deleteCommentAdmin(Long commentId);
 }

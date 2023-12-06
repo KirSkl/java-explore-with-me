@@ -35,7 +35,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleEditNotAllowException(EditNotAllowException e) {
+    public ApiError handleNotAllowException(NotAllowException e) {
         return new ApiError("FORBIDDEN", "For the requested operation the conditions are not met.",
                 e.getMessage(), LocalDateTime.now());
     }

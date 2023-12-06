@@ -11,8 +11,8 @@ import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.exceptions.DataConflictException;
-import ru.practicum.exceptions.EditNotAllowException;
 import ru.practicum.exceptions.InvalidDatesException;
+import ru.practicum.exceptions.NotAllowException;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
@@ -63,13 +63,13 @@ public class EventServiceImpl implements EventService {
             switch (request.getStateAction()) {
                 case REJECT_EVENT:
                     if (oldEvent.getState().equals(EventState.PUBLISHED)) {
-                        throw new EditNotAllowException("Cannot reject the event because it's in the state: PUBLISHED");
+                        throw new NotAllowException("Cannot reject the event because it's in the state: PUBLISHED");
                     }
                     oldEvent.setState(EventState.CANCELED);
                     break;
                 case PUBLISH_EVENT:
                     if (!oldEvent.getState().equals(EventState.PENDING)) {
-                        throw new EditNotAllowException("Cannot publish the event because " +
+                        throw new NotAllowException("Cannot publish the event because " +
                                 "it's not in the right state: PUBLISHED");
                     }
                     oldEvent.setState(EventState.PUBLISHED);
@@ -294,7 +294,7 @@ public class EventServiceImpl implements EventService {
 
     private void checkRequestStatus(ParticipationRequest request) {
         if (!request.getStatus().equals(RequestStatus.PENDING)) {
-            throw new EditNotAllowException("The request is not in right status: PENDING");
+            throw new NotAllowException("The request is not in right status: PENDING");
         }
     }
 }

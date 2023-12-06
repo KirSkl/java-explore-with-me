@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
 import ru.practicum.dto.comment.UpdateCommentDto;
-import ru.practicum.exceptions.EditNotAllowException;
+import ru.practicum.exceptions.NotAllowException;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.mapper.CommentMapper;
 import ru.practicum.model.Comment;
@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
         checkUserExistsAndGet(userId);
         var oldComment = checkCommentExistsAndGet(commentId);
         if (!oldComment.getAuthor().getId().equals(userId)) {
-            throw new EditNotAllowException("You can edit your comments only");
+            throw new NotAllowException("You can edit your comments only");
         }
         if (oldComment.getMeaning().equals(commentDto.getUpdateMeaning())) {
             return CommentMapper.toCommentDto(oldComment);
@@ -48,6 +48,23 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto getComment(Long commentId) {
         return CommentMapper.toCommentDto(checkCommentExistsAndGet(commentId));
+    }
+
+    @Override
+    public void deleteMyComment(Long userId, Long commentId) {
+        checkUserExistsAndGet(userId);
+        var comment = checkCommentExistsAndGet(commentId);
+        if (!comment.getAuthor().getId().equals(userId)) {
+            throw new NotAllowException("You can delete only your comments");
+        }
+        repository.delete(comment);
+    }
+
+    @Override
+    public void deleteCommentAdmin(Long commentId) {
+        if (repository.deleteByIdAndReturnCount(commentId) != 1) {
+            throw new NotFoundException(String.format("Comment with id = %s was not found", commentId));
+        }
     }
 
     private User checkUserExistsAndGet(Long userId) {
