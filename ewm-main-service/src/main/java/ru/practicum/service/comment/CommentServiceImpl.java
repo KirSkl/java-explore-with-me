@@ -77,6 +77,13 @@ public class CommentServiceImpl implements CommentService {
                 .map(CommentMapper::toCommentDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<CommentDto> getEventComment(Long eventId, PageRequest toPageRequest) {
+        checkEventExistsAndGet(eventId);
+        return repository.findAllByEventId(eventId).stream()
+                .map(CommentMapper::toCommentDto).collect(Collectors.toList());
+    }
+
     private User checkUserExistsAndGet(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException(String.format("User with id = %s was not found", userId)));
