@@ -2,10 +2,8 @@ package ru.practicum.controller.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.service.comment.CommentService;
 
 @RestController
@@ -15,7 +13,8 @@ import ru.practicum.service.comment.CommentService;
 public class CommentControllerAdmin {
     private final CommentService service;
 
-    @DeleteMapping(path = "{commentId}")
+    @DeleteMapping(path = "/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Long commentId) {
         log.info(String.format(
                 "Получен запрос DELETE /admin/comments/{commentId} = %s на удаление комментария", commentId));

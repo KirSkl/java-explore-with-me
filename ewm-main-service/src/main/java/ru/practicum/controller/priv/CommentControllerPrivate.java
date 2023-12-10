@@ -2,6 +2,7 @@ package ru.practicum.controller.priv;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Constants;
 import ru.practicum.common.PaginationUtil;
@@ -23,6 +24,7 @@ public class CommentControllerPrivate {
     private final CommentService service;
 
     @PostMapping(path = "/{eventId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public CommentDto postComment(@PathVariable Long userId, @PathVariable Long eventId,
                                   @Valid @RequestBody NewCommentDto commentDto) {
         log.info(String.format(
@@ -31,7 +33,7 @@ public class CommentControllerPrivate {
         return service.postComment(userId, eventId, commentDto);
     }
 
-    @PatchMapping(path = "{commentId}")
+    @PatchMapping(path = "/{commentId}")
     public CommentDto patchComment(@PathVariable Long userId, @PathVariable Long commentId,
                                    @Valid @RequestBody UpdateCommentDto commentDto) {
         log.info(String.format(
@@ -40,7 +42,8 @@ public class CommentControllerPrivate {
         return service.updateComment(userId, commentId, commentDto);
     }
 
-    @DeleteMapping(path = "{commentId}")
+    @DeleteMapping(path = "/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Long userId, @PathVariable Long commentId) {
         log.info(String.format(
                 "Получен запрос DELETE /users/{userId} = %s/comments/{commentId} = %s на удаление комментария",
@@ -50,8 +53,10 @@ public class CommentControllerPrivate {
 
     @GetMapping
     public List<CommentDto> getAllUserComments(@PathVariable Long userId,
-                                               @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero int from,
-                                               @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive int size) {
+                                               @RequestParam(defaultValue = Constants.DEFAULT_FROM)
+                                               @PositiveOrZero int from,
+                                               @RequestParam(defaultValue = Constants.DEFAULT_SIZE)
+                                               @Positive int size) {
         log.info(String.format(
                 "Получен запрос GET /users/{userId} = %s/comments на просмотр своих комментариев", userId));
         return service.getAllComments(userId, PaginationUtil.toPageRequest(from, size));
