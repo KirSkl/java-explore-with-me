@@ -1,7 +1,6 @@
 package ru.practicum.model;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,13 +42,14 @@ public class Comment {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return id != null && Objects.equals(id, comment.id);
+        return meaning.equals(comment.meaning) && author.equals(comment.author) && event.equals(comment.event)
+                && created.equals(comment.created) && Objects.equals(updated, comment.updated);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(meaning, author, event, created, updated);
     }
 }
