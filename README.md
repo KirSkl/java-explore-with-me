@@ -1,2 +1,8 @@
-# java-explore-with-me
-Template repository for ExploreWithMe project.
+# ExploreWithMe
+
+Сервис для совместного посещения мероприятий. 
+
+REST API приложение c разделением на сервисы, с тремя различными API - для неавторизованных
+пользователей, для авторизованных пользователей и админский API. 
+Используются следующие технологии: Sptring Boot, Maven, JPA,
+Hibernate ORM, PostgreSQL, SQL, Docker.
